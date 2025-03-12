@@ -39,6 +39,7 @@ class ExperimentConfig:
     SYSTEM_MESSAGE = "You are a paid participant in a psychological experiment. Your task is to carefully follow the given instructions and provide accurate responses."
     MEMORY_LIMIT = 10  # Number of messages to keep in memory
     INSTRUCTIONS = "Observe the following image and respond with 'b' if the text color is blue, 'm' if the text color is red."
+    MODEL = "gpt-4o"
 # Logging setup
 logger.add(ExperimentConfig.LOG_FILE, rotation="1 MB")
 
@@ -135,8 +136,9 @@ def run_trial(*,client, trial, word, color, participant_id, messages, practice=F
                     },
                 ]
         messages.append({"role": "user", "content": content})
-        response = openai.ChatCompletion.create(
-            model="gpt-4o",
+        
+        response = client.chat.completions.create(
+            model=ExperimentConfig.MODEL,
             messages=messages
         )
         gpt_response = response["choices"][0]["message"]["content"].strip().lower()
@@ -144,8 +146,8 @@ def run_trial(*,client, trial, word, color, participant_id, messages, practice=F
         while (gpt_response not in ["b", "m"]) and attempts_left > 0:
             attempts_left -= 1
             messages.append({"role": "user", "content": "Invalid response. Please respond with 'b' or 'm'."})
-            response = openai.ChatCompletion.create(
-                model="gpt-4o",
+            response = client.chat.completions.create(
+                model=ExperimentConfig.MODEL,
                 messages=messages
             )
             gpt_response = response["choices"][0]["message"]["content"].strip().lower()
@@ -236,5 +238,4 @@ if __name__ == "__main__":
         client = None
     else:
         client  = OpenAI(organization=None, project=None)
-    
     run_experiment(client)

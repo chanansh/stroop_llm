@@ -1,7 +1,11 @@
 import time
+import random
 from loguru import logger
-from .config import ExperimentConfig
-from .mock_api_handler import MockAPIHandler
+from config import (
+    MODEL, MAX_RETRIES, RETRY_DELAY
+)
+from mock_api_handler import MockAPIHandler
+from base_api_handler import BaseAPIHandler
 
 class APIHandlerFactory:
     @staticmethod
@@ -14,31 +18,58 @@ class APIHandlerFactory:
             raise ValueError("Client must be provided for real API handler")
         return RealAPIHandler(client)
 
-class RealAPIHandler:
+class RealAPIHandler(BaseAPIHandler):
     def __init__(self, client):
-        logger.info("Initializing Real API Handler")
+        super().__init__()
         self.client = client
-        self.config = ExperimentConfig
+    
+    def _send_request(self, messages, max_tokens):
+        """Send request to OpenAI API."""
+        response = self.client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            max_tokens=max_tokens
+        )
+        return response.choices[0].message.content.strip().lower()
     
     def get_response(self, messages, max_tokens=10):
-        """Get response from API with retry logic."""
+        """Get response from API with retry logic.
+        
+        Args:
+            messages: List of message dictionaries for the API
+            max_tokens: Maximum number of tokens in the response
+            
+        Returns:
+            tuple: (response_text, timing_info) where timing_info is a dict with:
+                - total_time: Total time including retries
+                - api_time: Time for successful API call only
+                - retry_count: Number of retries needed
+        """
         logger.debug(f"Getting response with max_tokens={max_tokens}")
-        for attempt in range(self.config.MAX_RETRIES):
+        total_start = time.time()
+        retry_count = 0
+        
+        for attempt in range(MAX_RETRIES):
             try:
-                logger.debug(f"API call attempt {attempt + 1}/{self.config.MAX_RETRIES}")
-                response = self.client.chat.completions.create(
-                    model=self.config.MODEL,
-                    messages=messages,
-                    max_tokens=max_tokens
-                )
-                result = response.choices[0].message.content.strip().lower()
+                logger.debug(f"API call attempt {attempt + 1}/{MAX_RETRIES}")
+                api_start = time.time()
+                result = self._send_request(messages, max_tokens)
+                api_time = time.time() - api_start
                 logger.debug(f"API response received: {result}")
-                return result
+                
+                timing_info = {
+                    "total_time": time.time() - total_start,
+                    "api_time": api_time,
+                    "retry_count": retry_count
+                }
+                return result, timing_info
+                
             except Exception as e:
                 logger.error(f"API call failed on attempt {attempt + 1}: {str(e)}")
-                if attempt < self.config.MAX_RETRIES - 1:
-                    logger.info(f"Retrying in {self.config.RETRY_DELAY} seconds...")
-                    time.sleep(self.config.RETRY_DELAY)
+                retry_count += 1
+                if attempt < MAX_RETRIES - 1:
+                    logger.info(f"Retrying in {RETRY_DELAY} seconds...")
+                    time.sleep(RETRY_DELAY)
                 else:
                     logger.critical("All retry attempts failed")
                     raise
@@ -55,7 +86,7 @@ class RealAPIHandler:
         logger.debug("Getting feedback response")
         try:
             response = self.client.chat.completions.create(
-                model=self.config.MODEL,
+                model=MODEL,
                 messages=messages,
                 max_tokens=20
             )
@@ -64,4 +95,14 @@ class RealAPIHandler:
             return result
         except Exception as e:
             logger.error(f"Failed to get feedback response: {str(e)}")
-            return "Error processing feedback" 
+            return "Error processing feedback"
+    
+    def get_ping_time(self):
+        """Measure network latency by timing a simple API call."""
+        try:
+            start_time = time.time()
+            self._send_request([{"role": "user", "content": "ping"}], max_tokens=1)
+            return time.time() - start_time
+        except Exception as e:
+            logger.warning(f"Failed to measure ping time: {str(e)}")
+            return 0.0  # Return 0 if ping fails 

@@ -1,19 +1,20 @@
-import random
 import time
+import random
 from loguru import logger
-from .config import ExperimentConfig
+from base_api_handler import BaseAPIHandler
 
-class MockAPIHandler:
+class MockAPIHandler(BaseAPIHandler):
     def __init__(self):
-        logger.info("Initializing Mock API Handler")
-        self.config = ExperimentConfig
-        self.response_times = []  # Track response times for realism
+        super().__init__()
         self.error_rate = 0.1  # 10% error rate
         logger.debug(f"Set error rate to {self.error_rate}")
     
-    def get_response(self, messages, max_tokens=10):
+    def _send_request(self, messages, max_tokens):
         """Simulate API response with realistic timing."""
         logger.debug("Processing mock API request")
+        
+        # Simulate network latency
+        time.sleep(random.uniform(0.1, 0.3))
         
         # Generate random response
         response = random.choice(["b", "m"])
@@ -31,7 +32,7 @@ class MockAPIHandler:
     def get_feedback_response(self, messages):
         """Simulate feedback response."""
         logger.debug("Generating mock feedback response")
-        latency = random.uniform(0.1, 0.3)
+        latency = 0
         logger.debug(f"Simulating feedback latency: {latency:.3f}s")
         time.sleep(latency)
         

@@ -1,46 +1,50 @@
-import time
-import random
 import os
+import time
+import json
+from typing import Dict, List, Optional, Tuple
 from loguru import logger
+from openai import OpenAI
+
 from config import (
-    MESSAGES_PER_STIMULUS, KEY_MAPPING,
-    WORDS, COLORS, IMAGE_DIR,
-    LOG_FILE, RESULTS_DIR,
-    PRACTICE_TRIALS, STIMULI_COUNT,
-    MESSAGES_PER_PRACTICE_TRIAL,
-    NUM_PARTICIPANTS
+    WORDS, COLORS, KEY_MAPPING,
+    MESSAGES_PER_PRACTICE_TRIAL, SYSTEM_MESSAGE,
+    MODEL, MAX_RETRIES, RETRY_DELAY,
+    MESSAGES_PER_STIMULUS, MESSAGES_PER_SYSTEM,
+    NUM_PARTICIPANTS,
+    PRACTICE_TRIALS,
+    TEST_TRIALS
 )
 from image_handler import ImageHandler
 from api_handler import APIHandlerFactory
-from utils import measure_ping
-from typing import Tuple, Dict, Any
 
 class TrialManager:
-    def __init__(self, client=None, use_mock=False):
+    def __init__(self, client=None, use_dryrun=False):
         logger.debug("Initializing Trial Manager")
-        self.image_handler = ImageHandler()
-        self.api_handler = APIHandlerFactory.create_handler(client, use_mock)
-        logger.debug(f"Using {'mock' if use_mock else 'real'} API handler")
+        self.image_handler = ImageHandler(overwrite_existing=True)
+        self.api_handler = APIHandlerFactory.create_handler(client, use_dryrun)
+        logger.debug(f"Using {'dry run' if use_dryrun else 'real'} API handler")
         self.key_mapping = KEY_MAPPING
     
     def _validate_message_count(self, messages, trial, practice):
-        """Validate the current message count before adding new stimuli."""
+        """Validate the current message count after adding new stimuli."""
         if practice:
             # For trial N, we should have:
             # - System message (1)
-            # - Previous trials' messages ((N-1) * 5)
-            expected_messages = 1 + trial * MESSAGES_PER_PRACTICE_TRIAL + MESSAGES_PER_STIMULUS
+            # - Previous trials' messages ((N) * MESSAGES_PER_PRACTICE_TRIAL)
+            # - Current stimulus message (1)
+            expected_messages = MESSAGES_PER_SYSTEM + (trial * MESSAGES_PER_PRACTICE_TRIAL) + MESSAGES_PER_STIMULUS
             if len(messages) != expected_messages:
-                error_msg = f"Context size error before adding stimuli: Expected {expected_messages} messages , but got {len(messages)}"
+                error_msg = f"Context size error after adding stimuli: Expected {expected_messages} messages , but got {len(messages)}"
                 logger.error(error_msg)
                 raise ValueError(error_msg)
         else:
             # After all practice trials, we should have:
             # - System message (1)
-            # - All practice trials' messages (PRACTICE_TRIALS * 5)
-            expected_messages = 1 + (MESSAGES_PER_PRACTICE_TRIAL * PRACTICE_TRIALS) + MESSAGES_PER_STIMULUS
+            # - All practice trials' messages (PRACTICE_TRIALS * MESSAGES_PER_PRACTICE_TRIAL)
+            # - Current stimulus message (1)
+            expected_messages = MESSAGES_PER_SYSTEM + (MESSAGES_PER_PRACTICE_TRIAL * PRACTICE_TRIALS) +  MESSAGES_PER_STIMULUS
             if len(messages) != expected_messages:
-                error_msg = f"Context size error before adding stimuli: Expected {expected_messages} messages (1 system + {PRACTICE_TRIALS} practice trials * 5), but got {len(messages)}"
+                error_msg = f"Context size error after adding stimuli: Expected {expected_messages} messages (1 system + {PRACTICE_TRIALS} practice trials * {MESSAGES_PER_PRACTICE_TRIAL} + 1 stimulus), but got {len(messages)}"
                 logger.error(error_msg)
                 raise ValueError(error_msg)
 
@@ -48,25 +52,23 @@ class TrialManager:
         """Add the text and image stimulus messages to the conversation."""
         text_message = {
             "role": "user",
-            "content": "What color is this text? Respond with 'b' for blue or 'm' for red."
-        }
-        image_message = {
-            "role": "user",
-            "content": {
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:image/png;base64,{base64_image}"
+            "content": [
+                {"type": "text", "text": "What color is this text? Respond with 'b' for blue or 'm' for red."},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/png;base64,{base64_image}"
+                    }
                 }
-            }
+            ]
         }
         messages.append(text_message)
-        messages.append(image_message)
 
     def _log_trial_header(self):
         """Log the header for trial results table."""
         header = (
-            "\n{:^8} | {:^12} | {:^8} | {:^8} | {:^10} | {:^10} | {:^9} | {:^10} | {:^8} | {:^8}"
-            .format("Part.", "Trial", "Type", "Word", "Color", "Type", "Response", "Correct", "RT (s)", "Context")
+            "\n{:^6} | {:^10} | {:^8} | {:^6} | {:^8} | {:^10} | {:^8} | {:^8} | {:^7} | {:^7} | {:^7} | {:^7} | {:^3} | {:^7} | {:^7} | {:^7}"
+            .format("Part.", "Trial", "Type", "Word", "Color", "Type", "Response", "Correct", "RT(s)", "RTT(s)", "Total", "Ctx", "✓/✗", "In-Tok", "Out-Tok", "Tot-Tok")
         )
         separator = "-" * len(header)
         logger.info(header)
@@ -74,11 +76,11 @@ class TrialManager:
 
     def _log_trial_results(self, trial_result, participant_id, trial, practice, word, color, response, messages):
         """Log the results of a single trial."""
-        total_trials = PRACTICE_TRIALS if practice else STIMULI_COUNT
+        total_trials = PRACTICE_TRIALS if practice else TEST_TRIALS
         is_mismatch = word != "XXXX" and ((word == "BLUE" and color == (255, 0, 0)) or (word == "RED" and color == (0, 0, 255)))
         
         trial_info = (
-            "{:^8} | {:^12} | {:^8} | {:^8s} | {:^8s} | {:^10s} | {:^10s} | {:^9s} | {:^8.3f} | {:^8}"
+            "{:^6} | {:^10} | {:^8} | {:^6} | {:^8} | {:^10} | {:^8} | {:^8} | {:^7.3f} | {:^7.3f} | {:^7.3f} | {:^7} | {:^3} | {:^7} | {:^7} | {:^7}"
             .format(
                 f"{participant_id}/{NUM_PARTICIPANTS}",
                 f"{trial + 1}/{total_trials}",
@@ -89,7 +91,13 @@ class TrialManager:
                 response,
                 trial_result['correct_response'],
                 trial_result['api_time'],
-                len(messages)  # Add context length
+                trial_result['rtt'],
+                trial_result['total_time'],
+                len(messages),
+                "✓" if trial_result['accuracy'] == 1 else "✗",
+                trial_result['input_tokens'],
+                trial_result['output_tokens'],
+                trial_result['total_tokens']
             )
         )
         logger.info(trial_info)
@@ -101,17 +109,17 @@ class TrialManager:
     def _handle_practice_feedback(self, trial_result, response, messages):
         """Handle practice trial feedback and get AI response."""
         if trial_result['accuracy'] == 1:
-            feedback = f"USER: Correct! The text color was '{trial_result['correct_response']}'."
+            feedback = f"Correct! The text color was '{trial_result['correct_response']}'."
         else:
-            feedback = f"USER: Incorrect. The text color was '{trial_result['correct_response']}'. Your response was '{response}'. Please try to be more accurate."
+            feedback = f"Incorrect. The text color was '{trial_result['correct_response']}'. Your response was '{response}'. Please try to be more accurate."
         
         # Add feedback message
         feedback_message = {
             "role": "user",
-            "content": feedback
+            "content": [{"type": "text", "text": feedback}]
         }
         messages.append(feedback_message)
-        logger.info(f"  Feedback: {feedback}")
+        logger.debug(f"  Feedback: {feedback}")
         
         # Get AI response to feedback
         start_time = time.time()
@@ -119,62 +127,144 @@ class TrialManager:
         end_time = time.time()
         
         # Unpack response
-        ai_response, reaction_time, total_time, retry_count = gpt_response
-        logger.info(f"  Response: {ai_response}")
+        ai_response, reaction_time, total_time, retry_count, token_usage = gpt_response
+        logger.debug(f"  Response: {ai_response}")
         
         # Add AI response to messages
         ai_message = {
             "role": "assistant",
-            "content": ai_response
+            "content": [{"type": "text", "text": ai_response["content"]}]
         }
         messages.append(ai_message)
         
         return feedback_message, ai_message
+
+    def _validate_response(self, response: str) -> bool:
+        """Validate that the response is either 'b' or 'm'.
+        
+        Args:
+            response: The response to validate
+            
+        Returns:
+            True if response is valid, False otherwise
+        """
+        is_valid = response.lower() in ['b', 'm']
+        if not is_valid:
+            logger.warning(f"Invalid response received: {response}")
+        return is_valid
+
+    def _handle_invalid_response(self, messages: List[Dict], response: str, max_retries: int = 3) -> Dict:
+        """Handle an invalid response by providing feedback and getting a new response.
+        
+        Args:
+            messages: The current message history
+            response: The invalid response
+            max_retries: Maximum number of retries for invalid responses
+            
+        Returns:
+            The corrected response
+        """
+        for attempt in range(max_retries):
+            feedback = f"Invalid response: '{response}'. Please respond with ONLY 'b' for blue or 'm' for red."
+            feedback_message = {
+                "role": "user",
+                "content": [{"type": "text", "text": feedback}]
+            }
+            messages.append(feedback_message)
+            logger.debug(f"  Feedback attempt {attempt + 1}/{max_retries}: {feedback}")
+            
+            # Get corrected response
+            start_time = time.time()
+            gpt_response = self.api_handler.get_response(messages, max_tokens=1)  # Limit to 1 token
+            end_time = time.time()
+            
+            # Unpack response
+            ai_response, reaction_time, total_time, retry_count, token_usage = gpt_response
+            logger.debug(f"  Corrected response: {ai_response}")
+            
+            # Validate the corrected response
+            if self._validate_response(ai_response["content"]):
+                # Add AI response to messages
+                ai_message = {
+                    "role": "assistant",
+                    "content": [{"type": "text", "text": ai_response["content"]}]
+                }
+                messages.append(ai_message)
+                return ai_response
+            
+            # If still invalid, remove the feedback and try again
+            messages.pop()  # Remove feedback message
+        
+        # If all retries failed, use a default response
+        logger.error(f"All {max_retries} retries failed for invalid response. Using default response.")
+        default_response = "b" if self.key_mapping[color] == "b" else "m"
+        ai_message = {
+            "role": "assistant",
+            "content": [{"type": "text", "text": default_response}]
+        }
+        messages.append(ai_message)
+        return ai_message
 
     def run_trial(self, trial, word, color, participant_id, messages, practice=False):
         """Run a single trial and return the results."""
         logger.debug(f"Starting {trial + 1} trial for participant {participant_id}")
         logger.debug(f"Initial message count: {len(messages)}")
         
-        # Get stimulus image path and encode it
-        img_path = self.image_handler.get_stimulus_path(word, color)
-        base64_image = self.image_handler.encode_image(img_path)
+        # Get image content for API request
+        image_content = self.image_handler.get_stimuli_encoded(word, color)
         
-        # Measure ping time right before the trial
-        ping_time = measure_ping(count=1)
-               
         # Add stimulus messages
-        self._add_stimulus_messages(messages, base64_image)
+        self._add_stimulus_messages(messages, image_content)
         logger.debug(f"Message count after adding stimuli: {len(messages)}")
-        # Validate message count before adding stimuli
+
+        # Validate message count after adding stimuli
         self._validate_message_count(messages, trial, practice)
+
+        # Measure API RTT right before the trial
+        rtt = self.api_handler.measure_rtt()
 
         # Get GPT response and measure time
         start_time = time.time()
-        response_message, reaction_time, total_time, retry_count = self.api_handler.get_response(messages)
+        response_message, reaction_time, total_time, retry_count, token_usage = self.api_handler.get_response(messages, max_tokens=1)  # Limit to 1 token
         end_time = time.time()
         logger.debug(f"Message count after GPT response: {len(messages)}")
         
-        # Create trial result
+        # Create trial result with all parameters
         response = response_message["content"]
+        
+        # Validate response and get corrected response if needed
+        if not self._validate_response(response):
+            response_message = self._handle_invalid_response(messages, response)
+            response = response_message["content"]
+            # Update timing for the corrected response
+            end_time = time.time()
+            reaction_time = end_time - start_time
+        
         correct_response = self.key_mapping[color]
         accuracy = 1 if response.lower() == correct_response else 0
+        is_mismatch = word != "XXXX" and ((word == "BLUE" and color == (255, 0, 0)) or (word == "RED" and color == (0, 0, 255)))
         
         trial_result = {
             "participant_id": participant_id,
             "trial_number": trial + 1,
+            "trial_type": "Practice" if practice else "Normal",
             "word": word,
-            "color": color,
+            "color": 'red' if color == (255, 0, 0) else 'blue',
+            "stimulus_type": 'mismatch' if is_mismatch else 'match',
             "gpt_response": response,
             "correct_response": correct_response,
             "accuracy": accuracy,
             "api_time": reaction_time,
-            "ping_time": ping_time,
-            "total_time": total_time + ping_time,
+            "rtt": rtt,
+            "total_time": total_time + rtt,
             "retry_count": retry_count,
             "start_time": start_time,
             "end_time": end_time,
-            "practice": practice
+            "practice": practice,
+            "context_size": len(messages),
+            "input_tokens": token_usage.prompt_tokens,
+            "output_tokens": token_usage.completion_tokens,
+            "total_tokens": token_usage.total_tokens
         }
         
         # Log trial results
@@ -187,17 +277,16 @@ class TrialManager:
             word, color, response, messages
         )
         
-        # Add AI's response to messages after logging
+        # Add the original AI response
         messages.append(response_message)
         
-        # Handle practice feedback
+        # Handle practice feedback or cleanup
         if practice:
             feedback_message, ai_message = self._handle_practice_feedback(trial_result, response, messages)
         else:
-            # For main trials, remove the stimulus messages
+            # For main trials, just remove the stimulus message
             messages.pop()  # Remove AI response
-            messages.pop()  # Remove image message
-            messages.pop()  # Remove text message
-            logger.debug(f"Message count after removing stimuli: {len(messages)}")
+            messages.pop()  # Remove stimulus message
+            logger.debug(f"Message count after removing stimulus: {len(messages)}")
         
         return trial_result 

@@ -1,17 +1,20 @@
 import time
-import random
+import json
+from typing import Dict, List, Optional, Tuple
 from loguru import logger
+from openai import OpenAI
 from config import (
-    MODEL, MAX_RETRIES, RETRY_DELAY
+    MODEL, MAX_RETRIES, RETRY_DELAY,
+    SYSTEM_MESSAGE, TEMPERATURE
 )
 from mock_api_handler import MockAPIHandler
 from base_api_handler import BaseAPIHandler
 
 class APIHandlerFactory:
     @staticmethod
-    def create_handler(client=None, use_mock=False):
-        logger.info(f"Creating {'mock' if use_mock else 'real'} API handler")
-        if use_mock:
+    def create_handler(client=None, use_dryrun=False):
+        logger.info(f"Creating {'dry run' if use_dryrun else 'real'} API handler")
+        if use_dryrun:
             return MockAPIHandler()
         if client is None:
             logger.error("No client provided for real API handler")
@@ -23,50 +26,57 @@ class RealAPIHandler(BaseAPIHandler):
         super().__init__()
         self.client = client
     
-    def _send_request(self, messages, max_tokens):
+    def measure_rtt(self):
+        """Measure round-trip time using a minimal API call."""
+        try:
+            start_time = time.time()
+            # Use a minimal message that should get a quick response
+            self.client.chat.completions.create(
+                model=MODEL,
+                messages=[{"role": "user", "content": "."}],
+                max_tokens=1
+            )
+            rtt = time.time() - start_time
+            logger.debug(f"API RTT: {rtt:.3f}s")
+            return rtt
+        except Exception as e:
+            logger.warning(f"Failed to measure API RTT: {str(e)}")
+            return 0.0
+    
+    def _send_request(self, messages, max_tokens=1):
         """Send request to OpenAI API."""
         response = self.client.chat.completions.create(
             model=MODEL,
             messages=messages,
+            temperature=TEMPERATURE,
             max_tokens=max_tokens
         )
-        return response.choices[0].message.content.strip().lower()
+        return response.choices[0].message.content.strip().lower(), response.usage
     
-    def get_response(self, messages, max_tokens=10):
-        """Get response from API with retry logic.
-        
-        Args:
-            messages: List of message dictionaries for the API
-            max_tokens: Maximum number of tokens in the response
-            
-        Returns:
-            tuple: (response_text, timing_info) where timing_info is a dict with:
-                - total_time: Total time including retries
-                - api_time: Time for successful API call only
-                - retry_count: Number of retries needed
-        """
-        logger.debug(f"Getting response with max_tokens={max_tokens}")
-        total_start = time.time()
-        retry_count = 0
-        
+    def get_response(self, messages, max_tokens=1):
+        """Get response from API with retries."""
         for attempt in range(MAX_RETRIES):
             try:
                 logger.debug(f"API call attempt {attempt + 1}/{MAX_RETRIES}")
-                api_start = time.time()
-                result = self._send_request(messages, max_tokens)
-                api_time = time.time() - api_start
-                logger.debug(f"API response received: {result}")
+                start_time = time.time()
+                response, usage = self._send_request(messages, max_tokens)
+                end_time = time.time()
                 
-                timing_info = {
-                    "total_time": time.time() - total_start,
-                    "api_time": api_time,
-                    "retry_count": retry_count
+                # Create response message
+                response_message = {
+                    "role": "assistant",
+                    "content": response
                 }
-                return result, timing_info
                 
+                return (
+                    response_message,
+                    end_time - start_time,  # reaction_time
+                    end_time - start_time,  # total_time
+                    attempt,  # retry_count
+                    usage  # token_usage
+                )
             except Exception as e:
                 logger.error(f"API call failed on attempt {attempt + 1}: {str(e)}")
-                retry_count += 1
                 if attempt < MAX_RETRIES - 1:
                     logger.info(f"Retrying in {RETRY_DELAY} seconds...")
                     time.sleep(RETRY_DELAY)
@@ -88,7 +98,8 @@ class RealAPIHandler(BaseAPIHandler):
             response = self.client.chat.completions.create(
                 model=MODEL,
                 messages=messages,
-                max_tokens=20
+                temperature=TEMPERATURE,
+                max_tokens=1
             )
             result = response.choices[0].message.content.strip()
             logger.debug(f"Feedback response received: {result}")

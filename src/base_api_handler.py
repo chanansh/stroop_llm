@@ -34,7 +34,7 @@ class BaseAPIHandler(ABC):
         return is_valid
     
     @abstractmethod
-    def _send_request(self, messages: List[Dict[str, Any]], max_tokens: int) -> str:
+    def _send_request(self, messages: List[Dict[str, Any]]) -> str:
         """Send a request to the API and return the response.
         
         This method must be implemented by concrete classes to handle the specific
@@ -42,7 +42,6 @@ class BaseAPIHandler(ABC):
         
         Args:
             messages: List of message dictionaries for the API
-            max_tokens: Maximum number of tokens in the response
             
         Returns:
             str: The API response
@@ -76,7 +75,7 @@ class BaseAPIHandler(ABC):
             try:
                 if retry_count > 0:  # Only log if it's a retry
                     logger.warning(f"API call attempt {retry_count + 1}/{MAX_RETRIES + 1}")
-                response_text = self._send_request(messages, max_tokens=10)  # Default max_tokens for color responses
+                response_text = self._send_request(messages)  # No max_tokens limit
                 end_time = time.time()
                 reaction_time = end_time - start_time
                 total_time = reaction_time + (retry_count * RETRY_DELAY)
@@ -107,7 +106,7 @@ class BaseAPIHandler(ABC):
         """
         logger.debug("Getting feedback response")
         try:
-            result = self._send_request(messages, max_tokens=20)
+            result = self._send_request(messages)  # No max_tokens limit
             logger.debug(f"Feedback response received: {result}")
             return result
         except Exception as e:

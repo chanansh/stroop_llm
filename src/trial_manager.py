@@ -12,7 +12,9 @@ from config import (
     MESSAGES_PER_STIMULUS, MESSAGES_PER_SYSTEM,
     NUM_PARTICIPANTS,
     PRACTICE_TRIALS,
-    TEST_TRIALS
+    TEST_TRIALS,
+    RESPONSE_BUTTON_BLUE,
+    RESPONSE_BUTTON_RED
 )
 from image_handler import ImageHandler
 from api_handler import APIHandlerFactory
@@ -42,7 +44,7 @@ class TrialManager:
             # - System message (1)
             # - All practice trials' messages (PRACTICE_TRIALS * MESSAGES_PER_PRACTICE_TRIAL)
             # - Current stimulus message (1)
-            expected_messages = MESSAGES_PER_SYSTEM + (MESSAGES_PER_PRACTICE_TRIAL * PRACTICE_TRIALS) +  MESSAGES_PER_STIMULUS
+            expected_messages = MESSAGES_PER_SYSTEM + (MESSAGES_PER_PRACTICE_TRIAL * PRACTICE_TRIALS) + MESSAGES_PER_STIMULUS
             if len(messages) != expected_messages:
                 error_msg = f"Context size error after adding stimuli: Expected {expected_messages} messages (1 system + {PRACTICE_TRIALS} practice trials * {MESSAGES_PER_PRACTICE_TRIAL} + 1 stimulus), but got {len(messages)}"
                 logger.error(error_msg)
@@ -53,7 +55,7 @@ class TrialManager:
         text_message = {
             "role": "user",
             "content": [
-                {"type": "text", "text": "What color is this text? Respond with 'b' for blue or 'm' for red."},
+                {"type": "text", "text": f"What color is this text? Respond with '{RESPONSE_BUTTON_BLUE}' for blue or '{RESPONSE_BUTTON_RED}' for red. ONLY respond with '{RESPONSE_BUTTON_BLUE}' or '{RESPONSE_BUTTON_RED}'! no other text or characters."},
                 {
                     "type": "image_url",
                     "image_url": {
@@ -67,37 +69,41 @@ class TrialManager:
     def _log_trial_header(self):
         """Log the header for trial results table."""
         header = (
-            "\n{:^6} | {:^10} | {:^8} | {:^6} | {:^8} | {:^10} | {:^8} | {:^8} | {:^7} | {:^7} | {:^7} | {:^7} | {:^3} | {:^7} | {:^7} | {:^7}"
-            .format("Part.", "Trial", "Type", "Word", "Color", "Type", "Response", "Correct", "RT(s)", "RTT(s)", "Total", "Ctx", "✓/✗", "In-Tok", "Out-Tok", "Tot-Tok")
+            "\n{:^6} | {:^10} | {:^8} | {:^6} | {:^6} | {:^8} | {:^8} | {:^3} | {:^7} | {:^7} | {:^7} | {:^10} | {:^8} | {:^10} | {:^10} | {:^10}"
+            .format(
+                "Part.", "Trial", "Type", "Word", "Color", "Response", 
+                "Correct", "✓/✗", "In-Tok", "Out-Tok", "Tot-Tok", "LogProb",
+                "Alt", "Alt-LogP", "Alt-Sum", "Cond."
+            )
         )
         separator = "-" * len(header)
+        logger.info(separator)
         logger.info(header)
         logger.info(separator)
 
     def _log_trial_results(self, trial_result, participant_id, trial, practice, word, color, response, messages):
         """Log the results of a single trial."""
         total_trials = PRACTICE_TRIALS if practice else TEST_TRIALS
-        is_mismatch = word != "XXXX" and ((word == "BLUE" and color == (255, 0, 0)) or (word == "RED" and color == (0, 0, 255)))
         
         trial_info = (
-            "{:^6} | {:^10} | {:^8} | {:^6} | {:^8} | {:^10} | {:^8} | {:^8} | {:^7.3f} | {:^7.3f} | {:^7.3f} | {:^7} | {:^3} | {:^7} | {:^7} | {:^7}"
+            "{:^6} | {:^10} | {:^8} | {:^6} | {:^6} | {:^8} | {:^8} | {:^3} | {:^7} | {:^7} | {:^7} | {:^10} | {:^8} | {:^10} | {:^10} | {:^10}"
             .format(
                 f"{participant_id}/{NUM_PARTICIPANTS}",
                 f"{trial + 1}/{total_trials}",
                 "Practice" if practice else "Normal",
                 word,
-                'red' if color == (255, 0, 0) else 'blue',
-                'mismatch' if is_mismatch else 'match',
+                trial_result['color'],
                 response,
                 trial_result['correct_response'],
-                trial_result['api_time'],
-                trial_result['rtt'],
-                trial_result['total_time'],
-                len(messages),
                 "✓" if trial_result['accuracy'] == 1 else "✗",
-                trial_result['input_tokens'],
-                trial_result['output_tokens'],
-                trial_result['total_tokens']
+                trial_result['prompt_tokens'],
+                trial_result['completion_tokens'],
+                trial_result['total_tokens'],
+                f"{trial_result['response_logprob']:.3f}" if isinstance(trial_result['response_logprob'], (float, int)) else 'N/A',
+                trial_result['second_best_response'],
+                f"{trial_result['second_best_logprob']:.3f}" if isinstance(trial_result['second_best_logprob'], (float, int)) else 'N/A',
+                f"{trial_result['alternative_sum']:.3f}" if isinstance(trial_result['alternative_sum'], (float, int)) else 'N/A',
+                trial_result['condition']
             )
         )
         logger.info(trial_info)
@@ -148,7 +154,7 @@ class TrialManager:
         Returns:
             True if response is valid, False otherwise
         """
-        is_valid = response.lower() in ['b', 'm']
+        is_valid = response.lower() in [RESPONSE_BUTTON_BLUE, RESPONSE_BUTTON_RED]
         if not is_valid:
             logger.warning(f"Invalid response received: {response}")
         return is_valid
@@ -165,7 +171,7 @@ class TrialManager:
             The corrected response
         """
         for attempt in range(max_retries):
-            feedback = f"Invalid response: '{response}'. Please respond with ONLY 'b' for blue or 'm' for red."
+            feedback = f"Invalid response: '{response}'. Please respond with ONLY '{RESPONSE_BUTTON_BLUE}' for blue or '{RESPONSE_BUTTON_RED}' for red."
             feedback_message = {
                 "role": "user",
                 "content": [{"type": "text", "text": feedback}]
@@ -197,7 +203,7 @@ class TrialManager:
         
         # If all retries failed, use a default response
         logger.error(f"All {max_retries} retries failed for invalid response. Using default response.")
-        default_response = "b" if self.key_mapping[color] == "b" else "m"
+        default_response = RESPONSE_BUTTON_BLUE if self.key_mapping[color] == "b" else RESPONSE_BUTTON_RED
         ai_message = {
             "role": "assistant",
             "content": [{"type": "text", "text": default_response}]
@@ -220,13 +226,8 @@ class TrialManager:
         # Validate message count after adding stimuli
         self._validate_message_count(messages, trial, practice)
 
-        # Measure API RTT right before the trial
-        rtt = self.api_handler.measure_rtt()
-
-        # Get GPT response and measure time
-        start_time = time.time()
-        response_message, reaction_time, total_time, retry_count, token_usage = self.api_handler.get_response(messages, max_tokens=1)  # Limit to 1 token
-        end_time = time.time()
+        # Get GPT response
+        response_message, retry_count, token_usage, logprobs = self.api_handler.get_response(messages, max_tokens=1)  # Limit to 1 token
         logger.debug(f"Message count after GPT response: {len(messages)}")
         
         # Create trial result with all parameters
@@ -236,57 +237,70 @@ class TrialManager:
         if not self._validate_response(response):
             response_message = self._handle_invalid_response(messages, response)
             response = response_message["content"]
-            # Update timing for the corrected response
-            end_time = time.time()
-            reaction_time = end_time - start_time
         
         correct_response = self.key_mapping[color]
-        accuracy = 1 if response.lower() == correct_response else 0
-        is_mismatch = word != "XXXX" and ((word == "BLUE" and color == (255, 0, 0)) or (word == "RED" and color == (0, 0, 255)))
+        accuracy = 1 if response == correct_response else 0
         
+        # Format color as a string
+        color_name = 'blue' if color == (0, 0, 255) else 'red' if color == (255, 0, 0) else 'unknown'
+        
+        # Determine condition
+        if word == "XXXX":
+            condition = "neutral"
+        elif (word == "BLUE" and color == (0, 0, 255)) or (word == "RED" and color == (255, 0, 0)):
+            condition = "congruent"
+        else:
+            condition = "incongruent"
+        
+        # Extract token usage details
+        prompt_tokens = token_usage.prompt_tokens
+        completion_tokens = token_usage.completion_tokens
+        total_tokens = token_usage.total_tokens
+        
+        # Extract logprob details and find opposite answer
+        main_logprob = logprobs.get('logprob', 'N/A')
+        top_logprobs = logprobs.get('top_logprobs', [])
+        
+        # Find the opposite answer in the logprobs
+        opposite_answer = RESPONSE_BUTTON_RED if response == RESPONSE_BUTTON_BLUE else RESPONSE_BUTTON_BLUE
+        opposite_logprob = None
+        for alt in top_logprobs:
+            if alt['token'].strip() == opposite_answer:
+                opposite_logprob = alt['logprob']
+                break
+        
+        # Calculate sum of likelihoods for all alternatives (excluding the main response)
+        import math
+        alternative_sum = 0.0
+        for alt in top_logprobs:
+            if alt['token'].strip() != response:  # Exclude the main response
+                alternative_sum += math.exp(alt['logprob'])
+        alternative_sum = math.log(alternative_sum) if alternative_sum > 0 else float('-inf')
+        
+        # Create trial result with formatted data
         trial_result = {
             "participant_id": participant_id,
-            "trial_number": trial + 1,
-            "trial_type": "Practice" if practice else "Normal",
+            "trial": trial + 1,
             "word": word,
-            "color": 'red' if color == (255, 0, 0) else 'blue',
-            "stimulus_type": 'mismatch' if is_mismatch else 'match',
-            "gpt_response": response,
+            "color": color_name,
+            "response": response,
             "correct_response": correct_response,
             "accuracy": accuracy,
-            "api_time": reaction_time,
-            "rtt": rtt,
-            "total_time": total_time + rtt,
             "retry_count": retry_count,
-            "start_time": start_time,
-            "end_time": end_time,
-            "practice": practice,
-            "context_size": len(messages),
-            "input_tokens": token_usage.prompt_tokens,
-            "output_tokens": token_usage.completion_tokens,
-            "total_tokens": token_usage.total_tokens
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": total_tokens,
+            "response_logprob": main_logprob,
+            "second_best_response": opposite_answer,
+            "second_best_logprob": opposite_logprob if opposite_logprob is not None else 'N/A',
+            "alternative_sum": alternative_sum,
+            "condition": condition
         }
         
-        # Log trial results
-        if trial == 0:
-            self._log_trial_header()
+        self._log_trial_results(trial_result, participant_id, trial, practice, word, color, response, messages)
         
-        # Log results before adding response to messages
-        self._log_trial_results(
-            trial_result, participant_id, trial, practice, 
-            word, color, response, messages
-        )
-        
-        # Add the original AI response
-        messages.append(response_message)
-        
-        # Handle practice feedback or cleanup
-        if practice:
-            feedback_message, ai_message = self._handle_practice_feedback(trial_result, response, messages)
-        else:
-            # For main trials, just remove the stimulus message
-            messages.pop()  # Remove AI response
-            messages.pop()  # Remove stimulus message
-            logger.debug(f"Message count after removing stimulus: {len(messages)}")
+        # Clean up messages after trial
+        messages.pop()  # Remove stimulus message
+        logger.debug(f"Message count after cleanup: {len(messages)}")
         
         return trial_result 

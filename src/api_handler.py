@@ -26,41 +26,49 @@ class RealAPIHandler(BaseAPIHandler):
         super().__init__()
         self.client = client
     
-    def measure_rtt(self):
-        """Measure round-trip time using a minimal API call."""
-        try:
-            start_time = time.time()
-            # Use a minimal message that should get a quick response
-            self.client.chat.completions.create(
-                model=MODEL,
-                messages=[{"role": "user", "content": "."}],
-                max_tokens=1
-            )
-            rtt = time.time() - start_time
-            logger.debug(f"API RTT: {rtt:.3f}s")
-            return rtt
-        except Exception as e:
-            logger.warning(f"Failed to measure API RTT: {str(e)}")
-            return 0.0
-    
     def _send_request(self, messages, max_tokens=1):
         """Send request to OpenAI API."""
         response = self.client.chat.completions.create(
             model=MODEL,
             messages=messages,
             temperature=TEMPERATURE,
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
+            logprobs=True,
+            top_logprobs=20  # Get top 20 most likely tokens
         )
-        return response.choices[0].message.content.strip().lower(), response.usage
+        content = response.choices[0].message.content.strip().lower()
+        usage = response.usage
+        
+        # Get the logprobs from the response
+        choice = response.choices[0]
+        if hasattr(choice, 'logprobs') and choice.logprobs:
+            logger.debug(f"Full logprobs response: {choice.logprobs}")
+            # Extract the logprobs for the chosen token and alternatives
+            token_logprobs = choice.logprobs.content[0]
+            logprobs_data = {
+                'token': token_logprobs.token,
+                'logprob': token_logprobs.logprob,
+                'top_logprobs': [
+                    {
+                        'token': alt.token,
+                        'logprob': alt.logprob
+                    }
+                    for alt in token_logprobs.top_logprobs
+                ]
+            }
+            logger.debug(f"Processed logprobs data: {logprobs_data}")
+        else:
+            logger.warning("No logprobs in API response")
+            logprobs_data = None
+        
+        return content, usage, logprobs_data
     
     def get_response(self, messages, max_tokens=1):
         """Get response from API with retries."""
         for attempt in range(MAX_RETRIES):
             try:
                 logger.debug(f"API call attempt {attempt + 1}/{MAX_RETRIES}")
-                start_time = time.time()
-                response, usage = self._send_request(messages, max_tokens)
-                end_time = time.time()
+                response, usage, logprobs = self._send_request(messages, max_tokens)
                 
                 # Create response message
                 response_message = {
@@ -70,10 +78,9 @@ class RealAPIHandler(BaseAPIHandler):
                 
                 return (
                     response_message,
-                    end_time - start_time,  # reaction_time
-                    end_time - start_time,  # total_time
                     attempt,  # retry_count
-                    usage  # token_usage
+                    usage,  # token_usage
+                    logprobs  # log probabilities
                 )
             except Exception as e:
                 logger.error(f"API call failed on attempt {attempt + 1}: {str(e)}")

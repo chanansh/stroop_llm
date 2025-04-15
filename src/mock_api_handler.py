@@ -2,46 +2,62 @@ import time
 import random
 from loguru import logger
 from base_api_handler import BaseAPIHandler
+from config import RESPONSE_BUTTON_BLUE, RESPONSE_BUTTON_RED
 
 class MockAPIHandler(BaseAPIHandler):
     def __init__(self):
         super().__init__()
-        self.error_rate = 0.1  # 10% error rate
-        logger.debug(f"Set error rate to {self.error_rate}")
+        self.responses = [RESPONSE_BUTTON_BLUE, RESPONSE_BUTTON_RED]
+        self.current_response = 0
     
-    def _send_request(self, messages, max_tokens):
-        """Simulate API response with realistic timing."""
-        logger.debug("Processing mock API request")
+    def _send_request(self, messages, max_tokens=1):
+        """Mock API request that alternates between blue and red responses."""
+        # Get the next response
+        response = self.responses[self.current_response]
+        self.current_response = (self.current_response + 1) % len(self.responses)
         
-        # Simulate network latency
-        time.sleep(random.uniform(0.1, 0.3))
+        # Mock usage data
+        usage = type('Usage', (), {
+            'prompt_tokens': 10,
+            'completion_tokens': 1,
+            'total_tokens': 11
+        })
         
-        # Generate random response
-        response = random.choice(["b", "m"])
+        # Mock logprobs data
+        logprobs_data = {
+            'content': {
+                'token': response,
+                'logprob': -0.5,
+                'top_logprobs': [
+                    {'token': response, 'logprob': -0.5},
+                    {'token': RESPONSE_BUTTON_RED if response == RESPONSE_BUTTON_BLUE else RESPONSE_BUTTON_BLUE, 'logprob': -1.0}
+                ]
+            }
+        }
         
-        # Return mock response
-        return response
+        return response, usage, logprobs_data
+    
+    def get_response(self, messages, max_tokens=1):
+        """Get mock response."""
+        response, usage, logprobs = self._send_request(messages, max_tokens)
+        
+        # Create response message
+        response_message = {
+            "role": "assistant",
+            "content": response
+        }
+        
+        return (
+            response_message,
+            0,  # retry_count
+            usage,  # token_usage
+            logprobs  # log probabilities
+        )
     
     def validate_response(self, response):
         """Validate that response is valid."""
-        is_valid = response in ["b", "m"]
-        if not is_valid:
-            logger.warning(f"Invalid mock response: {response}")
-        return is_valid
+        return response in [RESPONSE_BUTTON_BLUE, RESPONSE_BUTTON_RED]
     
     def get_feedback_response(self, messages):
-        """Simulate feedback response."""
-        logger.debug("Generating mock feedback response")
-        latency = 0
-        logger.debug(f"Simulating feedback latency: {latency:.3f}s")
-        time.sleep(latency)
-        
-        response = random.choice([
-            "Thank you for the feedback!",
-            "I understand now.",
-            "I'll try to be more accurate.",
-            "Got it, thanks!",
-            "I'll focus on the color next time."
-        ])
-        logger.debug(f"Generated mock feedback: {response}")
-        return response 
+        """Get mock feedback response."""
+        return "Feedback received" 

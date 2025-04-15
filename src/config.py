@@ -30,9 +30,12 @@ BACKGROUND_COLOR: Tuple[int, int, int] = (192, 192, 192)  # Silver
 FONT_NAME: str = "Courier New"
 
 # Key mappings for responses
+RESPONSE_BUTTON_BLUE: str = "b"  # Button for blue color response
+RESPONSE_BUTTON_RED: str = "m"   # Button for red color response
+
 KEY_MAPPING: Dict[Tuple[int, int, int], str] = {
-    (0, 0, 255): "b",  # Blue color -> 'b'
-    (255, 0, 0): "m"  # Red color -> 'm'
+    (0, 0, 255): RESPONSE_BUTTON_BLUE,  # Blue color -> 'b'
+    (255, 0, 0): RESPONSE_BUTTON_RED  # Red color -> 'm'
 }
 
 # File paths
@@ -43,11 +46,11 @@ RESULTS_DIR: str = "results"
 # Experiment settings
 DRY_RUN: bool = False  # Set to True for testing without OpenAI API
 NUM_PARTICIPANTS: int = 30
-SYSTEM_MESSAGE: str = """You are participating in a Stroop experiment. Your task is to identify the color of the text, not the word itself.
+SYSTEM_MESSAGE: str = f"""You are participating in a Stroop experiment. Your task is to identify the color of the text, not the word itself.
 
 Rules:
-1. Respond with 'b' if the text color is blue
-2. Respond with 'm' if the text color is red
+1. Respond with '{RESPONSE_BUTTON_BLUE}' if the text color is blue
+2. Respond with '{RESPONSE_BUTTON_RED}' if the text color is red
 3. Ignore the meaning of the word, focus only on its color
 4. Respond as quickly and accurately as possible
 
@@ -56,7 +59,7 @@ During practice trials, you will receive feedback on your responses. Use this fe
 # API configuration
 MODEL: str = "gpt-4o-mini"  # DO NOT CHANGE THIS
 MAX_RETRIES: int = 3
-RETRY_DELAY: int = 1  # seconds
+RETRY_DELAY: int = 1  # seconds between retries
 TEMPERATURE: float = 2.0  # Higher temperature for more variable responses
 
 # API Key

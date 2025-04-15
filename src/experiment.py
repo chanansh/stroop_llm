@@ -1,5 +1,4 @@
 import os
-import time
 import random
 import pandas as pd
 from datetime import datetime
@@ -60,23 +59,6 @@ def generate_trial_sequence(num_trials: int) -> List[Tuple[str, Tuple[int, int, 
     all_stimuli = list(product(WORDS, COLORS))
     return [random.choice(all_stimuli) for _ in range(num_trials)]
 
-def run_trial(*, client, trial, word, color, participant_id, messages, practice=False):
-    """Run a single trial, measuring response and providing feedback if practice."""
-    # Initialize trial manager
-    trial_manager = TrialManager(client=client, use_dryrun=args.dryrun)
-    
-    # Run the trial and get results
-    trial_result = trial_manager.run_trial(
-        trial=trial,
-        word=word,
-        color=color,
-        participant_id=participant_id,
-        messages=messages,
-        practice=practice
-    )
-    
-    return trial_result
-
 def run_participant_experiment(participant_id, client, use_dryrun=False, output_file=None):
     """Run the experiment for a single participant."""
     logger.debug(f"Starting experiment for participant {participant_id}...")
@@ -97,6 +79,9 @@ def run_participant_experiment(participant_id, client, use_dryrun=False, output_
     # Initialize results list
     all_results = []
     
+    # Print trial header
+    trial_manager._log_trial_header()
+    
     # Run practice trials
     logger.debug(f"Starting practice trials for participant {participant_id}")
     for trial, (word, color) in enumerate(practice_trials):
@@ -113,7 +98,18 @@ def run_participant_experiment(participant_id, client, use_dryrun=False, output_
         
         # Append trial result to CSV
         is_first_write = not os.path.exists(output_file)
-        pd.DataFrame([trial_result]).to_csv(
+        # Ensure all fields are included in the DataFrame
+        trial_df = pd.DataFrame([trial_result])
+        # Reorder columns to put alternative_sum in a logical position
+        columns = [
+            'participant_id', 'trial', 'word', 'color', 'response', 
+            'correct_response', 'accuracy', 'retry_count',
+            'prompt_tokens', 'completion_tokens', 'total_tokens',
+            'response_logprob', 'second_best_response', 'second_best_logprob',
+            'alternative_sum', 'condition'
+        ]
+        trial_df = trial_df[columns]
+        trial_df.to_csv(
             output_file, 
             mode='a', 
             header=is_first_write, 
@@ -139,7 +135,18 @@ def run_participant_experiment(participant_id, client, use_dryrun=False, output_
         
         # Append trial result to CSV
         is_first_write = not os.path.exists(output_file)
-        pd.DataFrame([trial_result]).to_csv(
+        # Ensure all fields are included in the DataFrame
+        trial_df = pd.DataFrame([trial_result])
+        # Reorder columns to put alternative_sum in a logical position
+        columns = [
+            'participant_id', 'trial', 'word', 'color', 'response', 
+            'correct_response', 'accuracy', 'retry_count',
+            'prompt_tokens', 'completion_tokens', 'total_tokens',
+            'response_logprob', 'second_best_response', 'second_best_logprob',
+            'alternative_sum', 'condition'
+        ]
+        trial_df = trial_df[columns]
+        trial_df.to_csv(
             output_file, 
             mode='a', 
             header=is_first_write, 

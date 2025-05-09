@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import base64
 import requests
@@ -35,19 +36,25 @@ class CLIPAnalyzer:
         
         # Define class sets for analysis
         self.class_sets = {
-            "word_only": [
-                "the word is red",
-                "the word is blue"
+            "meaning_only": [
+                "the text's meaning is red",
+                "the text's meaning is blue"
             ],
             "color_only": [
-                "the color is red",
-                "the color is blue"
+                "the text's font color is red",
+                "the text's font color is blue"
             ],
             "combined": [
-                "the word is red in red color",
-                "the word is red in blue color",
-                "the word is blue in red color",
-                "the word is blue in blue color"
+                "the text's meaning is red and the text's font color is red",
+                "the text's meaning is red and the text's font color is blue",
+                "the text's meaning is blue and the text's font color is red",
+                "the text's meaning is blue and the text's font color is blue"
+            ],
+            "combined_color_first": [
+                "the text's font color is red and the text's meaning is red",
+                "the text's font color is red and the text's meaning is blue",
+                "the text's font color is blue and the text's meaning is red",
+                "the text's font color is blue and the text's meaning is blue"
             ]
         }
         
@@ -164,8 +171,11 @@ def main():
     results = analyzer.analyze_all_images()
     
     # Save results
-    results.to_csv("results/clip_analysis.csv", index=False)
-    logger.info("Results saved to results/clip_analysis.csv")
+    output_dir = "results"
+    filename = f"clip_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+    full_path = os.path.join(output_dir, filename)  
+    results.to_csv(full_path, index=False)
+    logger.info(f"Results saved to {full_path}")
     logger.info("\nSummary of results:")
     logger.info(results.groupby(['word', 'color', 'class_set'])['probability'].mean().to_string())
 

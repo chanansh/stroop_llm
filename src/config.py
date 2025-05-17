@@ -46,7 +46,7 @@ RESULTS_DIR: str = "results"
 # Experiment settings
 DRY_RUN: bool = False  # Set to True for testing without OpenAI API
 NUM_PARTICIPANTS: int = 30
-SYSTEM_MESSAGE: str = f"""You are participating in a Stroop experiment. Your task is to identify the color of the text, not the word itself.
+SYSTEM_MESSAGE: str = f"""You are participating an experiment. Your task is to identify the color of the text, not the word itself.
 
 Rules:
 1. Respond with '{RESPONSE_BUTTON_BLUE}' if the text color is blue
@@ -60,7 +60,7 @@ During practice trials, you will receive feedback on your responses. Use this fe
 MODEL: str = "gpt-4o-mini"  # DO NOT CHANGE THIS
 MAX_RETRIES: int = 3
 RETRY_DELAY: int = 1  # seconds between retries
-TEMPERATURE: float = 2.0  # Higher temperature for more variable responses
+TEMPERATURE: float = 1.0  # Higher temperature for more variable responses
 
 # API Key
 OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY")

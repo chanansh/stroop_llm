@@ -1,7 +1,7 @@
 import argparse
 import os
 from loguru import logger
-from experiment import run_experiment
+from gpt4_old.experiment import run_experiment
 from config import ExperimentConfig
 
 def setup_logging(log_file: str = "experiment.log") -> None:

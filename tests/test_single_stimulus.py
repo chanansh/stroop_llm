@@ -2,7 +2,7 @@ import os
 import json
 from openai import OpenAI
 from loguru import logger
-from src.image_handler import ImageHandler
+from gpt4_old.image_handler import ImageHandler
 from src.config import (
     WORDS, COLORS, SYSTEM_MESSAGE,
     MODEL, MAX_RETRIES

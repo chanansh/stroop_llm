@@ -16,7 +16,7 @@ from config import (
     RESPONSE_BUTTON_BLUE,
     RESPONSE_BUTTON_RED
 )
-from image_handler import ImageHandler
+from gpt4_old.image_handler import ImageHandler
 from api_handler import APIHandlerFactory
 
 class TrialManager:

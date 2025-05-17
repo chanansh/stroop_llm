@@ -7,7 +7,7 @@ from config import (
     MODEL, MAX_RETRIES, RETRY_DELAY,
     SYSTEM_MESSAGE, TEMPERATURE
 )
-from mock_api_handler import MockAPIHandler
+from gpt4_old.mock_api_handler import MockAPIHandler
 from base_api_handler import BaseAPIHandler
 
 class APIHandlerFactory:

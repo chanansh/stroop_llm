@@ -27,7 +27,7 @@ def plot_heatmap(df):
     heatmap_data = df.pivot_table(
         values='probability',
         index=['word', 'color'],
-        columns='class_name',
+        columns='prompt',
         aggfunc='mean'
     )
     
@@ -44,9 +44,9 @@ def plot_congruency_effects(df):
     
     # Filter for combined class set and correct predictions
     combined_df = df[
-        (df['class_set'] == 'combined') & 
+        (df['experiment'] == 'combined') & 
         (df['word'] != 'XXXX') &
-        (df.apply(lambda x: x['class_name'] == f"the word is {x['word'].lower()} in {x['color']} color", axis=1))
+        (df.apply(lambda x: x['prompt'] == f"the word is {x['word'].lower()} in {x['color']} color", axis=1))
     ]
     
     # Create grouped bar plot
@@ -72,35 +72,35 @@ def plot_accuracy_by_task(df):
     task_accuracy = []
     
     # Word recognition accuracy (when the word matches the class)
-    word_acc = df[df['class_set'] == 'word_only'].apply(
-        lambda x: x['probability'] if x['class_name'] == f"the word is {x['word'].lower()}" else 0,
+    word_acc = df[df['experiment'] == 'word_only'].apply(
+        lambda x: x['probability'] if x['prompt'] == f"the word is {x['word'].lower()}" else 0,
         axis=1
     ).mean()
     task_accuracy.append(('Word Recognition', word_acc))
     
     # Color recognition accuracy (when the color matches the class)
-    color_acc = df[df['class_set'] == 'color_only'].apply(
-        lambda x: x['probability'] if x['class_name'] == f"the color is {x['color']}" else 0,
+    color_acc = df[df['experiment'] == 'color_only'].apply(
+        lambda x: x['probability'] if x['prompt'] == f"the color is {x['color']}" else 0,
         axis=1
     ).mean()
     task_accuracy.append(('Color Recognition', color_acc))
     
     # Combined task accuracy (congruent trials)
     cong_acc = df[
-        (df['class_set'] == 'combined') & 
+        (df['experiment'] == 'combined') & 
         (df['congruent'] == 'congruent')
     ].apply(
-        lambda x: x['probability'] if x['class_name'] == f"the word is {x['word'].lower()} in {x['color']} color" else 0,
+        lambda x: x['probability'] if x['prompt'] == f"the word is {x['word'].lower()} in {x['color']} color" else 0,
         axis=1
     ).mean()
     task_accuracy.append(('Combined (Congruent)', cong_acc))
     
     # Combined task accuracy (incongruent trials)
     incong_acc = df[
-        (df['class_set'] == 'combined') & 
+        (df['experiment'] == 'combined') & 
         (df['congruent'] == 'incongruent')
     ].apply(
-        lambda x: x['probability'] if x['class_name'] == f"the word is {x['word'].lower()} in {x['color']} color" else 0,
+        lambda x: x['probability'] if x['prompt'] == f"the word is {x['word'].lower()} in {x['color']} color" else 0,
         axis=1
     ).mean()
     task_accuracy.append(('Combined (Incongruent)', incong_acc))
@@ -117,7 +117,7 @@ def plot_accuracy_by_task(df):
 def analyze_stroop_effect(df):
     """Analyze and print statistics about the Stroop effect."""
     # Filter for combined trials
-    combined_df = df[df['class_set'] == 'combined']
+    combined_df = df[df['experiment'] == 'combined']
     
     # Calculate mean probabilities for congruent vs incongruent trials
     cong_mean = combined_df[combined_df['congruent'] == 'congruent']['probability'].mean()

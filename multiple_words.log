@@ -1,0 +1,718 @@
+2025-05-17 21:57:02.986 | INFO     | __main__:main:143 - Starting MultipleWords example
+2025-05-17 21:57:02.986 | INFO     | __main__:__init__:44 - Initializing MultipleWords with 10 words
+2025-05-17 21:57:02.986 | DEBUG    | __main__:__init__:58 - Using font size: 100
+2025-05-17 21:57:02.986 | INFO     | __main__:_calculate_dimensions:65 - Calculating image dimensions
+2025-05-17 21:57:02.986 | DEBUG    | __main__:get_font:20 - Loading font arial.ttf with size 100
+2025-05-17 21:57:02.990 | ERROR    | __main__:main:156 - Error occurred while running example
+Traceback (most recent call last):
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 160, in <module>
+    main()
+    └ <function main at 0x11cd52b60>
+
+> File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 145, in main
+    stimulus = MultipleWords(
+               └ <class '__main__.MultipleWords'>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 60, in __init__
+    self._calculate_dimensions()
+    │    └ <function MultipleWords._calculate_dimensions at 0x11cd52ca0>
+    └ <__main__.MultipleWords object at 0x1028669c0>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 67, in _calculate_dimensions
+    font = get_font(self.font_name, self.font_size)
+           │        │    │          │    └ 100
+           │        │    │          └ <__main__.MultipleWords object at 0x1028669c0>
+           │        │    └ 'arial.ttf'
+           │        └ <__main__.MultipleWords object at 0x1028669c0>
+           └ <function get_font at 0x11cd52a20>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 21, in get_font
+    return ImageFont.truetype(font_name, font_size)
+           │         │        │          └ 100
+           │         │        └ 'arial.ttf'
+           │         └ <function truetype at 0x102d1f880>
+           └ <module 'PIL.ImageFont' from '/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py'>
+
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 834, in truetype
+    return freetype(font)
+           │        └ 'arial.ttf'
+           └ <function truetype.<locals>.freetype at 0x11cd52fc0>
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 831, in freetype
+    return FreeTypeFont(font, size, index, encoding, layout_engine)
+           │            │     │     │      │         └ None
+           │            │     │     │      └ ''
+           │            │     │     └ 0
+           │            │     └ 100
+           │            └ 'arial.ttf'
+           └ <class 'PIL.ImageFont.FreeTypeFont'>
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 257, in __init__
+    self.font = core.getfont(
+    │           │    └ <built-in function getfont>
+    │           └ <module 'PIL._imagingft' from '/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/_imagingft.cpytho...
+    └ <PIL.ImageFont.FreeTypeFont object at 0x11cd4a9c0>
+
+OSError: cannot open resource
+2025-05-17 21:57:15.612 | INFO     | __main__:main:147 - Starting MultipleWords example
+2025-05-17 21:57:15.612 | INFO     | __main__:__init__:48 - Initializing MultipleWords with 10 words
+2025-05-17 21:57:15.612 | DEBUG    | __main__:__init__:62 - Using font size: 100
+2025-05-17 21:57:15.612 | INFO     | __main__:_calculate_dimensions:69 - Calculating image dimensions
+2025-05-17 21:57:15.612 | DEBUG    | __main__:get_font:20 - Loading font None with size 100
+2025-05-17 21:57:15.612 | ERROR    | __main__:main:159 - Error occurred while running example
+Traceback (most recent call last):
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 163, in <module>
+    main()
+    └ <function main at 0x1155bab60>
+
+> File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 149, in main
+    stimulus = MultipleWords(
+               └ <class '__main__.MultipleWords'>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 64, in __init__
+    self._calculate_dimensions()
+    │    └ <function MultipleWords._calculate_dimensions at 0x1155baca0>
+    └ <__main__.MultipleWords object at 0x1155917c0>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 71, in _calculate_dimensions
+    font = get_font(self.font_name, self.font_size)
+           │        │    │          │    └ 100
+           │        │    │          └ <__main__.MultipleWords object at 0x1155917c0>
+           │        │    └ None
+           │        └ <__main__.MultipleWords object at 0x1155917c0>
+           └ <function get_font at 0x1155baa20>
+
+  File "/Users/hshteingart/academy/stroop_llm/src/gpt4_matrix/multiple_words.py", line 22, in get_font
+    return ImageFont.truetype(font_name, font_size)
+           │         │        │          └ 100
+           │         │        └ None
+           │         └ <function truetype at 0x104be3880>
+           └ <module 'PIL.ImageFont' from '/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py'>
+
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 834, in truetype
+    return freetype(font)
+           │        └ None
+           └ <function truetype.<locals>.freetype at 0x1155bafc0>
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 831, in freetype
+    return FreeTypeFont(font, size, index, encoding, layout_engine)
+           │            │     │     │      │         └ None
+           │            │     │     │      └ ''
+           │            │     │     └ 0
+           │            │     └ 100
+           │            └ None
+           └ <class 'PIL.ImageFont.FreeTypeFont'>
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 261, in __init__
+    load_from_bytes(font)
+    │               └ None
+    └ <function FreeTypeFont.__init__.<locals>.load_from_bytes at 0x1155bb060>
+  File "/Users/hshteingart/academy/stroop_llm/.venv/lib/python3.12/site-packages/PIL/ImageFont.py", line 240, in load_from_bytes
+    self.font_bytes = f.read()
+    │                 └ None
+    └ <PIL.ImageFont.FreeTypeFont object at 0x1155b6450>
+
+AttributeError: 'NoneType' object has no attribute 'read'
+2025-05-17 21:57:59.302 | INFO     | __main__:main:150 - Starting MultipleWords example
+2025-05-17 21:57:59.302 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 10 words
+2025-05-17 21:57:59.302 | DEBUG    | __main__:__init__:65 - Using font size: 100
+2025-05-17 21:57:59.302 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 21:57:59.302 | DEBUG    | __main__:get_font:20 - Loading font None with size 100
+2025-05-17 21:57:59.302 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BLUE' dimensions: 25x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'RED' dimensions: 19x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'GREEN' dimensions: 33x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'YELLOW' dimensions: 41x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'PURPLE' dimensions: 37x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'ORANGE' dimensions: 40x8
+2025-05-17 21:57:59.302 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'PINK' dimensions: 24x8
+2025-05-17 21:57:59.303 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BROWN' dimensions: 37x8
+2025-05-17 21:57:59.303 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'GRAY' dimensions: 26x8
+2025-05-17 21:57:59.303 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BLACK' dimensions: 32x8
+2025-05-17 21:57:59.303 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 5
+2025-05-17 21:57:59.303 | INFO     | __main__:_calculate_dimensions:105 - Final image dimensions: 213x128
+2025-05-17 21:57:59.303 | INFO     | __main__:draw:109 - Drawing words on image
+2025-05-17 21:57:59.303 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 213x128
+2025-05-17 21:57:59.303 | DEBUG    | __main__:get_font:20 - Loading font None with size 100
+2025-05-17 21:57:59.303 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 21:57:59.303 | DEBUG    | __main__:draw:122 - Drawing word 'BLUE' at position (4.0, 4.0) with color blue
+2025-05-17 21:57:59.303 | DEBUG    | __main__:draw:122 - Drawing word 'RED' at position (106.5, 4.0) with color red
+2025-05-17 21:57:59.303 | DEBUG    | __main__:draw:122 - Drawing word 'GREEN' at position (4.0, 28.0) with color green
+2025-05-17 21:57:59.303 | DEBUG    | __main__:draw:122 - Drawing word 'YELLOW' at position (106.5, 28.0) with color yellow
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'PURPLE' at position (4.0, 52.0) with color purple
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'ORANGE' at position (106.5, 52.0) with color orange
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'PINK' at position (4.0, 76.0) with color pink
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'BROWN' at position (106.5, 76.0) with color brown
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'GRAY' at position (4.0, 100.0) with color gray
+2025-05-17 21:57:59.304 | DEBUG    | __main__:draw:122 - Drawing word 'BLACK' at position (106.5, 100.0) with color black
+2025-05-17 21:57:59.304 | INFO     | __main__:draw:127 - Image drawing completed
+2025-05-17 21:57:59.304 | INFO     | __main__:save:131 - Saving image to output.png
+2025-05-17 21:57:59.334 | INFO     | __main__:save:134 - Image saved successfully
+2025-05-17 21:59:39.911 | INFO     | __main__:main:152 - Starting MultipleWords example
+2025-05-17 21:59:39.911 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 10 words
+2025-05-17 21:59:39.911 | DEBUG    | __main__:__init__:65 - Using font size: 100
+2025-05-17 21:59:39.911 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 21:59:39.911 | DEBUG    | __main__:get_font:20 - Loading font None with size 100
+2025-05-17 21:59:39.911 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 21:59:39.911 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BLUE' dimensions: 25x8
+2025-05-17 21:59:39.911 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'RED' dimensions: 19x8
+2025-05-17 21:59:39.911 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'GREEN' dimensions: 33x8
+2025-05-17 21:59:39.911 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'YELLOW' dimensions: 41x8
+2025-05-17 21:59:39.911 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'PURPLE' dimensions: 37x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'ORANGE' dimensions: 40x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'PINK' dimensions: 24x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BROWN' dimensions: 37x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'GRAY' dimensions: 26x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'BLACK' dimensions: 32x8
+2025-05-17 21:59:39.912 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 5
+2025-05-17 21:59:39.912 | INFO     | __main__:_calculate_dimensions:112 - Final image dimensions: 205x120
+2025-05-17 21:59:39.912 | INFO     | __main__:draw:116 - Drawing words on image
+2025-05-17 21:59:39.912 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 205x120
+2025-05-17 21:59:39.912 | DEBUG    | __main__:get_font:20 - Loading font None with size 100
+2025-05-17 21:59:39.912 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 21:59:39.912 | DEBUG    | __main__:draw:126 - Drawing word 'BLUE' at position (30.75, 8.0) with color blue
+2025-05-17 21:59:39.912 | DEBUG    | __main__:draw:126 - Drawing word 'RED' at position (133.25, 8.0) with color red
+2025-05-17 21:59:39.912 | DEBUG    | __main__:draw:126 - Drawing word 'GREEN' at position (30.75, 32.0) with color green
+2025-05-17 21:59:39.912 | DEBUG    | __main__:draw:126 - Drawing word 'YELLOW' at position (133.25, 32.0) with color yellow
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'PURPLE' at position (30.75, 56.0) with color purple
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'ORANGE' at position (133.25, 56.0) with color orange
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'PINK' at position (30.75, 80.0) with color pink
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'BROWN' at position (133.25, 80.0) with color brown
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'GRAY' at position (30.75, 104.0) with color gray
+2025-05-17 21:59:39.913 | DEBUG    | __main__:draw:126 - Drawing word 'BLACK' at position (133.25, 104.0) with color black
+2025-05-17 21:59:39.913 | INFO     | __main__:draw:129 - Image drawing completed
+2025-05-17 21:59:39.913 | INFO     | __main__:save:133 - Saving image to output.png
+2025-05-17 21:59:39.923 | INFO     | __main__:save:136 - Image saved successfully
+2025-05-17 22:02:01.716 | INFO     | __main__:main:152 - Starting MultipleWords example
+2025-05-17 22:02:01.716 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 12 words
+2025-05-17 22:02:01.716 | DEBUG    | __main__:__init__:65 - Using font size: 120
+2025-05-17 22:02:01.717 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 22:02:01.717 | DEBUG    | __main__:get_font:20 - Loading font None with size 120
+2025-05-17 22:02:01.717 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:02:01.717 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:02:01.718 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 4
+2025-05-17 22:02:01.718 | INFO     | __main__:_calculate_dimensions:112 - Final image dimensions: 240x140
+2025-05-17 22:02:01.718 | INFO     | __main__:draw:116 - Drawing words on image
+2025-05-17 22:02:01.718 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 240x140
+2025-05-17 22:02:01.718 | DEBUG    | __main__:get_font:20 - Loading font None with size 120
+2025-05-17 22:02:01.718 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:02:01.718 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 12.5) with color red
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 12.5) with color lime
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (184.0, 12.5) with color purple
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (24.0, 47.5) with color brown
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (104.0, 47.5) with color blue
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (184.0, 47.5) with color red
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (24.0, 82.5) with color lime
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (104.0, 82.5) with color brown
+2025-05-17 22:02:01.719 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (184.0, 82.5) with color blue
+2025-05-17 22:02:01.720 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 117.5) with color purple
+2025-05-17 22:02:01.720 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 117.5) with color red
+2025-05-17 22:02:01.720 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (184.0, 117.5) with color green
+2025-05-17 22:02:01.720 | INFO     | __main__:draw:129 - Image drawing completed
+2025-05-17 22:02:01.720 | INFO     | __main__:save:133 - Saving image to output.png
+2025-05-17 22:02:01.734 | INFO     | __main__:save:136 - Image saved successfully
+2025-05-17 22:02:35.070 | INFO     | __main__:main:152 - Starting MultipleWords example
+2025-05-17 22:02:35.071 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 12 words
+2025-05-17 22:02:35.071 | DEBUG    | __main__:__init__:65 - Using font size: 120
+2025-05-17 22:02:35.071 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 22:02:35.071 | DEBUG    | __main__:get_font:20 - Loading font None with size 120
+2025-05-17 22:02:35.071 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:02:35.072 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:02:35.073 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 4
+2025-05-17 22:02:35.073 | INFO     | __main__:_calculate_dimensions:112 - Final image dimensions: 240x140
+2025-05-17 22:02:35.073 | INFO     | __main__:draw:116 - Drawing words on image
+2025-05-17 22:02:35.073 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 240x140
+2025-05-17 22:02:35.074 | DEBUG    | __main__:get_font:20 - Loading font None with size 120
+2025-05-17 22:02:35.074 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:02:35.074 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 12.5) with color red
+2025-05-17 22:02:35.074 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 12.5) with color lime
+2025-05-17 22:02:35.074 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (184.0, 12.5) with color purple
+2025-05-17 22:02:35.074 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (24.0, 47.5) with color brown
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (104.0, 47.5) with color blue
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (184.0, 47.5) with color red
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (24.0, 82.5) with color lime
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (104.0, 82.5) with color brown
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (184.0, 82.5) with color blue
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 117.5) with color purple
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 117.5) with color red
+2025-05-17 22:02:35.075 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (184.0, 117.5) with color green
+2025-05-17 22:02:35.075 | INFO     | __main__:draw:129 - Image drawing completed
+2025-05-17 22:02:35.075 | INFO     | __main__:save:133 - Saving image to output.png
+2025-05-17 22:02:35.089 | INFO     | __main__:save:136 - Image saved successfully
+2025-05-17 22:03:00.878 | INFO     | __main__:main:152 - Starting MultipleWords example
+2025-05-17 22:03:00.879 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 12 words
+2025-05-17 22:03:00.879 | DEBUG    | __main__:__init__:65 - Using font size: 1000
+2025-05-17 22:03:00.879 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 22:03:00.879 | DEBUG    | __main__:get_font:20 - Loading font None with size 1000
+2025-05-17 22:03:00.879 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:03:00.879 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:03:00.880 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 4
+2025-05-17 22:03:00.880 | INFO     | __main__:_calculate_dimensions:112 - Final image dimensions: 240x140
+2025-05-17 22:03:00.880 | INFO     | __main__:draw:116 - Drawing words on image
+2025-05-17 22:03:00.880 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 240x140
+2025-05-17 22:03:00.880 | DEBUG    | __main__:get_font:20 - Loading font None with size 1000
+2025-05-17 22:03:00.880 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:03:00.880 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 12.5) with color red
+2025-05-17 22:03:00.880 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 12.5) with color lime
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (184.0, 12.5) with color purple
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (24.0, 47.5) with color brown
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (104.0, 47.5) with color blue
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (184.0, 47.5) with color red
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (24.0, 82.5) with color lime
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (104.0, 82.5) with color brown
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (184.0, 82.5) with color blue
+2025-05-17 22:03:00.881 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 117.5) with color purple
+2025-05-17 22:03:00.882 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 117.5) with color red
+2025-05-17 22:03:00.882 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (184.0, 117.5) with color green
+2025-05-17 22:03:00.882 | INFO     | __main__:draw:129 - Image drawing completed
+2025-05-17 22:03:00.882 | INFO     | __main__:save:133 - Saving image to output.png
+2025-05-17 22:03:00.904 | INFO     | __main__:save:136 - Image saved successfully
+2025-05-17 22:04:00.697 | INFO     | __main__:main:152 - Starting MultipleWords example
+2025-05-17 22:04:00.698 | INFO     | __main__:__init__:51 - Initializing MultipleWords with 12 words
+2025-05-17 22:04:00.698 | DEBUG    | __main__:__init__:65 - Using font size: 1200
+2025-05-17 22:04:00.698 | INFO     | __main__:_calculate_dimensions:72 - Calculating image dimensions
+2025-05-17 22:04:00.698 | DEBUG    | __main__:get_font:20 - Loading font None with size 1200
+2025-05-17 22:04:00.698 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Purple' dimensions: 32x10
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Brown' dimensions: 30x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Red' dimensions: 18x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Green' dimensions: 30x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:85 - Word 'Blue' dimensions: 22x8
+2025-05-17 22:04:00.699 | DEBUG    | __main__:_calculate_dimensions:89 - Number of rows: 4
+2025-05-17 22:04:00.699 | INFO     | __main__:_calculate_dimensions:112 - Final image dimensions: 240x140
+2025-05-17 22:04:00.699 | INFO     | __main__:draw:116 - Drawing words on image
+2025-05-17 22:04:00.699 | DEBUG    | __main__:get_image:32 - Creating new image with dimensions 240x140
+2025-05-17 22:04:00.700 | DEBUG    | __main__:get_font:20 - Loading font None with size 1200
+2025-05-17 22:04:00.700 | INFO     | __main__:get_font:22 - No font name provided, using default font.
+2025-05-17 22:04:00.700 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 12.5) with color red
+2025-05-17 22:04:00.700 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 12.5) with color lime
+2025-05-17 22:04:00.700 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (184.0, 12.5) with color purple
+2025-05-17 22:04:00.700 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (24.0, 47.5) with color brown
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (104.0, 47.5) with color blue
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (184.0, 47.5) with color red
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Purple' at position (24.0, 82.5) with color lime
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (104.0, 82.5) with color brown
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Brown' at position (184.0, 82.5) with color blue
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Red' at position (24.0, 117.5) with color purple
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Green' at position (104.0, 117.5) with color red
+2025-05-17 22:04:00.701 | DEBUG    | __main__:draw:126 - Drawing word 'Blue' at position (184.0, 117.5) with color green
+2025-05-17 22:04:00.701 | INFO     | __main__:draw:129 - Image drawing completed
+2025-05-17 22:04:00.701 | INFO     | __main__:save:133 - Saving image to output.png
+2025-05-17 22:04:00.715 | INFO     | __main__:save:136 - Image saved successfully
+2025-05-17 22:07:48.489 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:07:48.489 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:07:48.489 | DEBUG    | __main__:__init__:87 - Using font size: 120
+2025-05-17 22:07:48.489 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:07:48.489 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 120
+2025-05-17 22:07:48.502 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 220x87
+2025-05-17 22:07:48.502 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 334x88
+2025-05-17 22:07:48.503 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 347x110
+2025-05-17 22:07:48.503 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 340x87
+2025-05-17 22:07:48.503 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 240x87
+2025-05-17 22:07:48.503 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 220x87
+2025-05-17 22:07:48.503 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 347x110
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 220x87
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 340x87
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 220x87
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 334x88
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 240x87
+2025-05-17 22:07:48.504 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:07:48.504 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 2602x1540
+2025-05-17 22:07:48.504 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:07:48.504 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 2602x1540
+2025-05-17 22:07:48.507 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 120
+2025-05-17 22:07:48.509 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (260.25, 137.5) with color red
+2025-05-17 22:07:48.510 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (1127.75, 137.5) with color lime
+2025-05-17 22:07:48.510 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (1995.25, 137.5) with color purple
+2025-05-17 22:07:48.511 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (260.25, 522.5) with color brown
+2025-05-17 22:07:48.512 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (1127.75, 522.5) with color blue
+2025-05-17 22:07:48.512 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (1995.25, 522.5) with color red
+2025-05-17 22:07:48.512 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (260.25, 907.5) with color lime
+2025-05-17 22:07:48.513 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (1127.75, 907.5) with color brown
+2025-05-17 22:07:48.513 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (1995.25, 907.5) with color blue
+2025-05-17 22:07:48.514 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (260.25, 1292.5) with color purple
+2025-05-17 22:07:48.514 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (1127.75, 1292.5) with color red
+2025-05-17 22:07:48.515 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (1995.25, 1292.5) with color green
+2025-05-17 22:07:48.515 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:07:48.515 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:07:48.654 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:08:21.943 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:08:21.943 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:08:21.943 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:08:21.943 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:08:21.943 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:08:21.962 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:08:21.962 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:08:21.963 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:08:21.964 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:08:21.964 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:08:21.964 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:08:21.964 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:08:21.964 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:08:21.964 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 652x392
+2025-05-17 22:08:21.964 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:08:21.964 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 652x392
+2025-05-17 22:08:21.965 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:08:21.967 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 35.0) with color red
+2025-05-17 22:08:21.967 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 35.0) with color lime
+2025-05-17 22:08:21.967 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (500.25, 35.0) with color purple
+2025-05-17 22:08:21.968 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (65.25, 133.0) with color brown
+2025-05-17 22:08:21.968 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (282.75, 133.0) with color blue
+2025-05-17 22:08:21.968 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (500.25, 133.0) with color red
+2025-05-17 22:08:21.969 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (65.25, 231.0) with color lime
+2025-05-17 22:08:21.969 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (282.75, 231.0) with color brown
+2025-05-17 22:08:21.969 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (500.25, 231.0) with color blue
+2025-05-17 22:08:21.970 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 329.0) with color purple
+2025-05-17 22:08:21.970 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 329.0) with color red
+2025-05-17 22:08:21.970 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (500.25, 329.0) with color green
+2025-05-17 22:08:21.970 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:08:21.971 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:08:21.990 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:09:39.616 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:09:39.617 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:09:39.617 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:09:39.617 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:09:39.617 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:09:39.635 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:39.636 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:09:39.636 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:09:39.637 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:09:39.637 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:09:39.638 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:39.638 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:09:39.639 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:39.639 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:09:39.640 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:39.640 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:09:39.641 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:09:39.641 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:09:39.641 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 652x392
+2025-05-17 22:09:39.641 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:09:39.641 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 652x392 and background white
+2025-05-17 22:09:39.642 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:09:39.643 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 35.0) with color red
+2025-05-17 22:09:39.644 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 35.0) with color lime
+2025-05-17 22:09:39.644 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (500.25, 35.0) with color purple
+2025-05-17 22:09:39.644 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (65.25, 133.0) with color brown
+2025-05-17 22:09:39.645 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (282.75, 133.0) with color blue
+2025-05-17 22:09:39.645 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (500.25, 133.0) with color red
+2025-05-17 22:09:39.645 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (65.25, 231.0) with color lime
+2025-05-17 22:09:39.646 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (282.75, 231.0) with color brown
+2025-05-17 22:09:39.646 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (500.25, 231.0) with color blue
+2025-05-17 22:09:39.646 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 329.0) with color purple
+2025-05-17 22:09:39.647 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 329.0) with color red
+2025-05-17 22:09:39.647 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (500.25, 329.0) with color green
+2025-05-17 22:09:39.647 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:09:39.647 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:09:39.668 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:09:42.196 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:09:42.196 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:09:42.196 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:09:42.196 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:09:42.197 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:09:42.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:42.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:09:42.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:09:42.203 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:09:42.203 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:09:42.204 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:42.204 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:09:42.204 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:42.205 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:09:42.205 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:09:42.205 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:09:42.205 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:09:42.205 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:09:42.205 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 652x392
+2025-05-17 22:09:42.205 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:09:42.205 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 652x392 and background white
+2025-05-17 22:09:42.206 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:09:42.210 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 35.0) with color red
+2025-05-17 22:09:42.211 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 35.0) with color lime
+2025-05-17 22:09:42.212 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (500.25, 35.0) with color purple
+2025-05-17 22:09:42.213 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (65.25, 133.0) with color brown
+2025-05-17 22:09:42.214 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (282.75, 133.0) with color blue
+2025-05-17 22:09:42.215 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (500.25, 133.0) with color red
+2025-05-17 22:09:42.216 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (65.25, 231.0) with color lime
+2025-05-17 22:09:42.217 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (282.75, 231.0) with color brown
+2025-05-17 22:09:42.218 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (500.25, 231.0) with color blue
+2025-05-17 22:09:42.219 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 329.0) with color purple
+2025-05-17 22:09:42.220 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 329.0) with color red
+2025-05-17 22:09:42.224 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (500.25, 329.0) with color green
+2025-05-17 22:09:42.224 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:09:42.224 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:09:42.246 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:16:19.596 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:16:19.596 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:16:19.596 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:16:19.596 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:16:19.596 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:16:19.603 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:16:19.604 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:16:19.604 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:16:19.604 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:16:19.604 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:16:19.604 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:16:19.605 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:16:19.605 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:16:19.605 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:16:19.605 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:16:19.605 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:16:19.606 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:16:19.606 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:16:19.606 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 652x392
+2025-05-17 22:16:19.606 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:16:19.606 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 652x392 and background white
+2025-05-17 22:16:19.606 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:16:19.608 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 35.0) with color red
+2025-05-17 22:16:19.608 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 35.0) with color lime
+2025-05-17 22:16:19.609 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (500.25, 35.0) with color darkviolet
+2025-05-17 22:16:19.609 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (65.25, 133.0) with color peru
+2025-05-17 22:16:19.609 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (282.75, 133.0) with color royalblue
+2025-05-17 22:16:19.610 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (500.25, 133.0) with color red
+2025-05-17 22:16:19.610 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (65.25, 231.0) with color lime
+2025-05-17 22:16:19.610 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (282.75, 231.0) with color peru
+2025-05-17 22:16:19.610 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (500.25, 231.0) with color royalblue
+2025-05-17 22:16:19.611 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (65.25, 329.0) with color darkviolet
+2025-05-17 22:16:19.611 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (282.75, 329.0) with color red
+2025-05-17 22:16:19.611 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (500.25, 329.0) with color lime
+2025-05-17 22:16:19.612 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:16:19.612 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:16:19.651 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:17:12.964 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:17:12.964 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:17:12.964 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:17:12.964 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:17:12.964 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:17:12.967 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:17:12.967 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:17:12.967 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:17:12.968 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:17:12.969 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:17:12.969 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:17:12.969 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:17:12.969 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:17:12.969 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 522x168
+2025-05-17 22:17:12.969 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:17:12.969 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 522x168 and background white
+2025-05-17 22:17:12.969 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:17:12.971 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (43.5, 7.0) with color red
+2025-05-17 22:17:12.971 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (217.5, 7.0) with color lime
+2025-05-17 22:17:12.972 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (391.5, 7.0) with color darkviolet
+2025-05-17 22:17:12.972 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (43.5, 49.0) with color peru
+2025-05-17 22:17:12.973 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (217.5, 49.0) with color royalblue
+2025-05-17 22:17:12.973 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (391.5, 49.0) with color red
+2025-05-17 22:17:12.973 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (43.5, 91.0) with color lime
+2025-05-17 22:17:12.973 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (217.5, 91.0) with color peru
+2025-05-17 22:17:12.974 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (391.5, 91.0) with color royalblue
+2025-05-17 22:17:12.974 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (43.5, 133.0) with color darkviolet
+2025-05-17 22:17:12.974 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (217.5, 133.0) with color red
+2025-05-17 22:17:12.975 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (391.5, 133.0) with color lime
+2025-05-17 22:17:12.975 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:17:12.975 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:17:12.987 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:24:06.189 | INFO     | __main__:main:174 - Starting MultipleWords example
+2025-05-17 22:24:06.190 | INFO     | __main__:__init__:73 - Initializing MultipleWords with 12 words
+2025-05-17 22:24:06.190 | DEBUG    | __main__:__init__:87 - Using font size: 30
+2025-05-17 22:24:06.190 | INFO     | __main__:_calculate_dimensions:94 - Calculating image dimensions
+2025-05-17 22:24:06.190 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:24:06.200 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:24:06.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:24:06.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:24:06.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:24:06.201 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Purple' dimensions: 87x28
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Brown' dimensions: 85x22
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Red' dimensions: 55x22
+2025-05-17 22:24:06.202 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Green' dimensions: 83x22
+2025-05-17 22:24:06.203 | DEBUG    | __main__:_calculate_dimensions:107 - Word 'Blue' dimensions: 60x22
+2025-05-17 22:24:06.203 | DEBUG    | __main__:_calculate_dimensions:111 - Number of rows: 4
+2025-05-17 22:24:06.203 | INFO     | __main__:_calculate_dimensions:134 - Final image dimensions: 287x168
+2025-05-17 22:24:06.203 | INFO     | __main__:draw:138 - Drawing words on image
+2025-05-17 22:24:06.203 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 287x168 and background white
+2025-05-17 22:24:06.203 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:24:06.205 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (4.3500000000000005, 7.0) with color red
+2025-05-17 22:24:06.206 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (100.05, 7.0) with color lime
+2025-05-17 22:24:06.206 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (195.75, 7.0) with color darkviolet
+2025-05-17 22:24:06.206 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (4.3500000000000005, 49.0) with color peru
+2025-05-17 22:24:06.207 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (100.05, 49.0) with color royalblue
+2025-05-17 22:24:06.207 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (195.75, 49.0) with color red
+2025-05-17 22:24:06.207 | DEBUG    | __main__:draw:148 - Drawing word 'Purple' at position (4.3500000000000005, 91.0) with color lime
+2025-05-17 22:24:06.208 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (100.05, 91.0) with color peru
+2025-05-17 22:24:06.208 | DEBUG    | __main__:draw:148 - Drawing word 'Brown' at position (195.75, 91.0) with color royalblue
+2025-05-17 22:24:06.208 | DEBUG    | __main__:draw:148 - Drawing word 'Red' at position (4.3500000000000005, 133.0) with color darkviolet
+2025-05-17 22:24:06.208 | DEBUG    | __main__:draw:148 - Drawing word 'Green' at position (100.05, 133.0) with color red
+2025-05-17 22:24:06.209 | DEBUG    | __main__:draw:148 - Drawing word 'Blue' at position (195.75, 133.0) with color lime
+2025-05-17 22:24:06.209 | INFO     | __main__:draw:151 - Image drawing completed
+2025-05-17 22:24:06.209 | INFO     | __main__:save:155 - Saving image to output.png
+2025-05-17 22:24:06.224 | INFO     | __main__:save:158 - Image saved successfully
+2025-05-17 22:28:34.732 | INFO     | __main__:main:179 - Starting MultipleWords example
+2025-05-17 22:28:34.732 | INFO     | __main__:__init__:74 - Initializing MultipleWords with 12 words
+2025-05-17 22:28:34.733 | DEBUG    | __main__:__init__:91 - Using font size: 30
+2025-05-17 22:28:34.733 | INFO     | __main__:_calculate_dimensions:98 - Calculating image dimensions
+2025-05-17 22:28:34.733 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:28:34.748 | INFO     | __main__:_calculate_dimensions:128 - Final image dimensions: 245x168
+2025-05-17 22:28:34.748 | INFO     | __main__:draw:132 - Drawing words on image
+2025-05-17 22:28:34.748 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 245x168 and background white
+2025-05-17 22:28:34.748 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:28:34.750 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (8.328125, 7.0) with color red
+2025-05-17 22:28:34.750 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (64.2078125, 7.0) with color lime
+2025-05-17 22:28:34.751 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (148.41562499999998, 7.0) with color darkviolet
+2025-05-17 22:28:34.751 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (8.328125, 49.0) with color peru
+2025-05-17 22:28:34.751 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (94.2078125, 49.0) with color royalblue
+2025-05-17 22:28:34.752 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (155.10312499999998, 49.0) with color red
+2025-05-17 22:28:34.752 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (8.328125, 85.0) with color darkviolet
+2025-05-17 22:28:34.752 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (95.8953125, 85.0) with color red
+2025-05-17 22:28:34.753 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (151.77499999999998, 85.0) with color peru
+2025-05-17 22:28:34.753 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (8.328125, 127.0) with color red
+2025-05-17 22:28:34.753 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (64.2078125, 127.0) with color lime
+2025-05-17 22:28:34.753 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (148.41562499999998, 127.0) with color royalblue
+2025-05-17 22:28:34.754 | INFO     | __main__:draw:156 - Image drawing completed
+2025-05-17 22:28:34.754 | INFO     | __main__:save:160 - Saving image to output.png
+2025-05-17 22:28:34.813 | INFO     | __main__:save:163 - Image saved successfully
+2025-05-17 22:28:54.927 | INFO     | __main__:main:179 - Starting MultipleWords example
+2025-05-17 22:28:54.927 | INFO     | __main__:__init__:74 - Initializing MultipleWords with 12 words
+2025-05-17 22:28:54.927 | DEBUG    | __main__:__init__:91 - Using font size: 30
+2025-05-17 22:28:54.927 | INFO     | __main__:_calculate_dimensions:98 - Calculating image dimensions
+2025-05-17 22:28:54.928 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:28:54.943 | INFO     | __main__:_calculate_dimensions:128 - Final image dimensions: 260x168
+2025-05-17 22:28:54.943 | INFO     | __main__:draw:132 - Drawing words on image
+2025-05-17 22:28:54.943 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 260x168 and background white
+2025-05-17 22:28:54.944 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:28:54.945 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (8.328125, 7.0) with color red
+2025-05-17 22:28:54.946 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (71.703125, 7.0) with color lime
+2025-05-17 22:28:54.947 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (163.40625, 7.0) with color darkviolet
+2025-05-17 22:28:54.947 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (8.328125, 49.0) with color peru
+2025-05-17 22:28:54.947 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (101.703125, 49.0) with color royalblue
+2025-05-17 22:28:54.948 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (170.09375, 49.0) with color red
+2025-05-17 22:28:54.948 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (8.328125, 85.0) with color darkviolet
+2025-05-17 22:28:54.948 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (103.390625, 85.0) with color red
+2025-05-17 22:28:54.949 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (166.765625, 85.0) with color peru
+2025-05-17 22:28:54.949 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (8.328125, 127.0) with color red
+2025-05-17 22:28:54.949 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (71.703125, 127.0) with color lime
+2025-05-17 22:28:54.950 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (163.40625, 127.0) with color royalblue
+2025-05-17 22:28:54.950 | INFO     | __main__:draw:156 - Image drawing completed
+2025-05-17 22:28:54.950 | INFO     | __main__:save:160 - Saving image to output.png
+2025-05-17 22:28:54.962 | INFO     | __main__:save:163 - Image saved successfully
+2025-05-17 22:29:11.686 | INFO     | __main__:main:179 - Starting MultipleWords example
+2025-05-17 22:29:11.686 | INFO     | __main__:__init__:74 - Initializing MultipleWords with 12 words
+2025-05-17 22:29:11.686 | DEBUG    | __main__:__init__:91 - Using font size: 30
+2025-05-17 22:29:11.686 | INFO     | __main__:_calculate_dimensions:98 - Calculating image dimensions
+2025-05-17 22:29:11.686 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:29:11.703 | INFO     | __main__:_calculate_dimensions:128 - Final image dimensions: 260x168
+2025-05-17 22:29:11.703 | INFO     | __main__:draw:132 - Drawing words on image
+2025-05-17 22:29:11.703 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 260x168 and background white
+2025-05-17 22:29:11.704 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:29:11.705 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (9.09375, 7.0) with color red
+2025-05-17 22:29:11.706 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (72.46875, 7.0) with color lime
+2025-05-17 22:29:11.706 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (164.171875, 7.0) with color darkviolet
+2025-05-17 22:29:11.707 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (21.59375, 49.0) with color peru
+2025-05-17 22:29:11.707 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (114.96875, 49.0) with color royalblue
+2025-05-17 22:29:11.708 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (183.359375, 49.0) with color red
+2025-05-17 22:29:11.708 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (8.2578125, 85.0) with color darkviolet
+2025-05-17 22:29:11.708 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (103.3203125, 85.0) with color red
+2025-05-17 22:29:11.709 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (166.6953125, 85.0) with color peru
+2025-05-17 22:29:11.709 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (22.4296875, 127.0) with color red
+2025-05-17 22:29:11.709 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (85.8046875, 127.0) with color lime
+2025-05-17 22:29:11.710 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (177.5078125, 127.0) with color royalblue
+2025-05-17 22:29:11.710 | INFO     | __main__:draw:156 - Image drawing completed
+2025-05-17 22:29:11.710 | INFO     | __main__:save:160 - Saving image to output.png
+2025-05-17 22:29:11.722 | INFO     | __main__:save:163 - Image saved successfully
+2025-05-17 22:30:23.432 | INFO     | __main__:main:179 - Starting MultipleWords example
+2025-05-17 22:30:23.433 | INFO     | __main__:__init__:74 - Initializing MultipleWords with 12 words
+2025-05-17 22:30:23.433 | DEBUG    | __main__:__init__:91 - Using font size: 30
+2025-05-17 22:30:23.433 | INFO     | __main__:_calculate_dimensions:98 - Calculating image dimensions
+2025-05-17 22:30:23.433 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:30:23.448 | INFO     | __main__:_calculate_dimensions:128 - Final image dimensions: 260x168
+2025-05-17 22:30:23.448 | INFO     | __main__:draw:132 - Drawing words on image
+2025-05-17 22:30:23.448 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 260x168 and background white
+2025-05-17 22:30:23.448 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:30:23.450 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (9.09375, 7.0) with color red
+2025-05-17 22:30:23.450 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (72.46875, 7.0) with color lime
+2025-05-17 22:30:23.451 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (164.171875, 7.0) with color darkviolet
+2025-05-17 22:30:23.451 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (21.59375, 49.0) with color peru
+2025-05-17 22:30:23.451 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (114.96875, 49.0) with color royalblue
+2025-05-17 22:30:23.452 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (183.359375, 49.0) with color red
+2025-05-17 22:30:23.452 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (8.2578125, 85.0) with color darkviolet
+2025-05-17 22:30:23.452 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (103.3203125, 85.0) with color red
+2025-05-17 22:30:23.453 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (166.6953125, 85.0) with color peru
+2025-05-17 22:30:23.453 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (22.4296875, 127.0) with color red
+2025-05-17 22:30:23.453 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (85.8046875, 127.0) with color lime
+2025-05-17 22:30:23.453 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (177.5078125, 127.0) with color royalblue
+2025-05-17 22:30:23.454 | INFO     | __main__:draw:156 - Image drawing completed
+2025-05-17 22:30:23.454 | INFO     | __main__:save:160 - Saving image to output.png
+2025-05-17 22:30:23.467 | INFO     | __main__:save:163 - Image saved successfully
+2025-05-17 22:30:40.611 | INFO     | __main__:main:179 - Starting MultipleWords example
+2025-05-17 22:30:40.611 | INFO     | __main__:__init__:74 - Initializing MultipleWords with 12 words
+2025-05-17 22:30:40.611 | DEBUG    | __main__:__init__:91 - Using font size: 30
+2025-05-17 22:30:40.611 | INFO     | __main__:_calculate_dimensions:98 - Calculating image dimensions
+2025-05-17 22:30:40.612 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:30:40.621 | INFO     | __main__:_calculate_dimensions:128 - Final image dimensions: 260x168
+2025-05-17 22:30:40.621 | INFO     | __main__:draw:132 - Drawing words on image
+2025-05-17 22:30:40.622 | DEBUG    | __main__:get_image:54 - Creating new image with dimensions 260x168 and background white
+2025-05-17 22:30:40.622 | DEBUG    | __main__:get_font:41 - Loading font Arial.ttf with size 30
+2025-05-17 22:30:40.626 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (9.09375, 7.0) with color red
+2025-05-17 22:30:40.627 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (72.46875, 7.0) with color lime
+2025-05-17 22:30:40.628 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (164.171875, 7.0) with color darkviolet
+2025-05-17 22:30:40.629 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (21.59375, 49.0) with color peru
+2025-05-17 22:30:40.630 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (114.96875, 49.0) with color royalblue
+2025-05-17 22:30:40.631 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (183.359375, 49.0) with color red
+2025-05-17 22:30:40.632 | DEBUG    | __main__:draw:149 - Drawing word 'Purple' at position (8.2578125, 85.0) with color darkviolet
+2025-05-17 22:30:40.632 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (103.3203125, 85.0) with color red
+2025-05-17 22:30:40.633 | DEBUG    | __main__:draw:149 - Drawing word 'Brown' at position (166.6953125, 85.0) with color peru
+2025-05-17 22:30:40.634 | DEBUG    | __main__:draw:149 - Drawing word 'Red' at position (22.4296875, 127.0) with color red
+2025-05-17 22:30:40.635 | DEBUG    | __main__:draw:149 - Drawing word 'Green' at position (85.8046875, 127.0) with color lime
+2025-05-17 22:30:40.636 | DEBUG    | __main__:draw:149 - Drawing word 'Blue' at position (177.5078125, 127.0) with color royalblue
+2025-05-17 22:30:40.636 | INFO     | __main__:draw:156 - Image drawing completed
+2025-05-17 22:30:40.636 | INFO     | __main__:save:160 - Saving image to output.png
+2025-05-17 22:30:40.649 | INFO     | __main__:save:163 - Image saved successfully

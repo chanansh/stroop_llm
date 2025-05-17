@@ -19,8 +19,8 @@ from config import (
     IMG_WIDTH, IMG_HEIGHT, FONT_SIZE,
     BACKGROUND_COLOR, FONT_NAME
 )
-from trial_manager import TrialManager
-from image_handler import ImageHandler
+from gpt4_old.trial_manager import TrialManager
+from gpt4_old.image_handler import ImageHandler
 
 # Configure logger to show debug messages
 logger.remove()

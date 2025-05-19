@@ -6,10 +6,8 @@ from typing import List, Tuple, Optional
 import math
 from loguru import logger
 import os
-
-# change to debug (console only but colorized)
-logger.remove()
-logger.add(sys.stdout, level="DEBUG", colorize=True)
+import io
+import base64
 
 def color_to_rgb(color: str) -> Tuple[int, int, int]:
     """Convert color name to RGB tuple."""
@@ -36,14 +34,33 @@ def find_font(font_name: str) -> str:
             return path
     raise FileNotFoundError(f"Font {font_name} not found in common locations.")
 
-def get_font(font_name: str, font_size: int) -> ImageFont.FreeTypeFont:
+def get_font(font_name: str, font_size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
     """Get a font object with specified name and size."""
-    logger.debug(f"Loading font {font_name} with size {font_size}")
+    logger.debug(f"Loading font {font_name} with size {font_size} (bold: {bold})")
     if font_name is None:
         logger.info("No font name provided, using default font.")
         return ImageFont.load_default()
     try:
         font_path = find_font(font_name)
+        if bold:
+            # Try to find a bold variant of the font
+            base_name = os.path.splitext(font_path)[0]
+            bold_path = f"{base_name} Bold.ttf"
+            if os.path.exists(bold_path):
+                return ImageFont.truetype(bold_path, font_size)
+            # If no bold variant exists, try common bold font names
+            bold_fonts = [
+                "Arial Bold.ttf",
+                "Helvetica Bold.ttf",
+                "Times New Roman Bold.ttf",
+                "Verdana Bold.ttf"
+            ]
+            for bold_font in bold_fonts:
+                try:
+                    return ImageFont.truetype(bold_font, font_size)
+                except Exception:
+                    continue
+            logger.warning("Could not find a bold font variant, using regular font")
         return ImageFont.truetype(font_path, font_size)
     except Exception as e:
         logger.warning(f"Could not load font {font_name}: {e}, falling back to default font")
@@ -69,7 +86,8 @@ class MultipleWords:
                  font_name: str = None,  # Will use default if None
                  font_size: int = 60,
                  background_color: str = "white",
-                 alignment: str = "left"):  # 'left' or 'center'
+                 alignment: str = "left",  # 'left' or 'center'
+                 bold: bool = False):  # Whether to use bold text
         """Initialize the MultipleWords generator."""
         logger.info(f"Initializing MultipleWords with {len(words)} words")
         if len(words) != len(colors):
@@ -87,6 +105,7 @@ class MultipleWords:
         self.font_size = font_size
         self.background_color = background_color
         self.alignment = alignment
+        self.bold = bold
         
         logger.debug(f"Using font size: {self.font_size}")
         # Calculate dimensions and create image
@@ -96,7 +115,7 @@ class MultipleWords:
     def _calculate_dimensions(self):
         """Calculate image dimensions based on content and spacing."""
         logger.info("Calculating image dimensions")
-        font = get_font(self.font_name, self.font_size)
+        font = get_font(self.font_name, self.font_size, self.bold)
         space_width = font.getlength(" ")
         max_word_height = 0
         rows = []
@@ -132,7 +151,7 @@ class MultipleWords:
         logger.info("Drawing words on image")
         image = get_image(self.width, self.height, self.background_color)
         draw = ImageDraw.Draw(image)
-        font = get_font(self.font_name, self.font_size)
+        font = get_font(self.font_name, self.font_size, self.bold)
         y = self.margin_y
         global_word_idx = 0
         for row in self.rows:
@@ -166,10 +185,14 @@ class MultipleWords:
             logger.error(f"Failed to save image: {str(e)}")
             raise
 
-    def get_base64(self) -> bytes:
-        """Get the image as bytes."""
-        logger.debug("Converting image to bytes")
-        return self.image.tobytes()
+    def get_base64(self) -> str:
+        """Get the image as a base64-encoded PNG string."""
+        logger.debug("Converting image to base64 PNG")
+        buffered = io.BytesIO()
+        self.image.save(buffered, format="PNG")
+        img_bytes = buffered.getvalue()
+        img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+        return img_base64
     
     def get_image(self) -> Image.Image:
         """Get the PIL Image object."""
@@ -197,6 +220,7 @@ def main():
     font_name = "Arial.ttf"
     background_color = "white"
     alignment = "center"
+    bold = True  # Enable bold text
     stimulus = MultipleWords(
         words=words,
         colors=colors,
@@ -206,7 +230,8 @@ def main():
         font_name=font_name,
         font_size=font_size,
         background_color=background_color,
-        alignment=alignment
+        alignment=alignment,
+        bold=bold
     )
     stimulus.save("output.png")
 

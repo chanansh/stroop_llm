@@ -138,12 +138,17 @@ class MultipleWords:
         self.space_width = space_width
         self.max_word_height = max_word_height
         self.v_spacing = self.line_spacing * max_word_height
-        # Image width is the widest row + margin
+        # Calculate text block height (all rows + all vertical spacings between rows)
+        n_rows = len(rows)
+        text_block_height = n_rows * max_word_height + (n_rows - 1) * self.v_spacing
+        # Margins
         margin_x = self.space_width
+        margin_y = self.space_width  # Use horizontal margin for vertical as well for symmetry
         self.margin_x = margin_x
-        self.margin_y = self.v_spacing / 2
+        self.margin_y = margin_y
+        self.text_block_height = text_block_height
         self.width = int(max(row['row_width'] for row in rows) + 2 * margin_x)
-        self.height = int(len(rows) * max_word_height + (len(rows) - 1) * self.v_spacing + 2 * self.margin_y)
+        self.height = int(text_block_height + 2 * margin_y)
         logger.info(f"Final image dimensions: {self.width}x{self.height}")
     
     def draw(self):
@@ -152,7 +157,8 @@ class MultipleWords:
         image = get_image(self.width, self.height, self.background_color)
         draw = ImageDraw.Draw(image)
         font = get_font(self.font_name, self.font_size, self.bold)
-        y = self.margin_y
+        # Start y so that the text block is vertically centered
+        y = (self.height - self.text_block_height) / 2
         global_word_idx = 0
         for row in self.rows:
             row_words = row['words']
@@ -213,7 +219,7 @@ def main():
         "lime", "peru", "royalblue",
         "darkviolet", "red", "lime"
     ]
-    words_per_row = 3
+    words_per_row = 20
     char_spacing = 1
     line_spacing = 0.5  # Increase for a bigger gap between rows
     font_size = 30

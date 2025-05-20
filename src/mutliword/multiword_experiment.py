@@ -157,7 +157,7 @@ def run_trial(trial: int, config: ExperimentConfig):
             except Exception as e:
                 logger.error(f"Unexpected error in trial {trial}: {str(e)}")
                 raise e
-
+    logger.info(f"response: {response_json}")
     logger.info(f"saving stimulus...")
     stimulus.save(os.path.join(config.output_path, f"trial_{trial}.png"))
     len_response = len(response_json) if response_json is not None else 0
@@ -172,6 +172,7 @@ def run_trial(trial: int, config: ExperimentConfig):
         "response": response_json if response_json is not None else [],
         "trial_time": datetime.now(),
         "total_tokens": total_tokens,
+        "prompt": config.prompt,
     }
     logger.info(trial_data)
     

@@ -23,7 +23,7 @@ from typing import Dict, List
 import sys
 from pprint import pprint
 dotenv.load_dotenv()
-
+from tqdm import tqdm
 # Configure logger
 logger.remove()  # Remove default handler
 logger.add(
@@ -193,7 +193,7 @@ def run_experiment(config: ExperimentConfig):
         json.dump(asdict(config), f)
     
     experiment_data = []
-    for trial in range(config.number_of_trials):
+    for trial in tqdm(range(config.number_of_trials)):
         logger.info(f"Running trial {trial} of {config.number_of_trials}")
         try:
             trial_data = run_trial(trial, config)

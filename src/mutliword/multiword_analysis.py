@@ -15,6 +15,8 @@ import matplotlib.colors as mcolors
 from PIL import Image
 from typing import List, Dict, Tuple
 from Levenshtein import distance as levenshtein_distance
+from string2string.alignment import NeedlemanWunsch
+from string2string.misc import Tokenizer
 
 legit_color_confusion = {"orange": "brown"}
 def get_experiment_parameters(experiment_path: str):
@@ -263,25 +265,45 @@ def analyze_single_experiment(experiment_path: str) -> pd.DataFrame:
     color_mapping = experiment_parameters["color_mapping"]
     inverse_color_mapping = {v: k for k, v in color_mapping.items() if v is not None}
     
-    # Analyze sequence alignment
-    # alignment_metrics = analyze_sequence_alignment(trials)
-    # logger.info("\nSequence Alignment Metrics:")
-    # for metric, value in alignment_metrics.items():
-    #     logger.info(f"{metric}: {value:.3f}")
-    
     # Create sequence alignment visualization
     figures_path = os.path.join(experiment_path, 'figures')
     os.makedirs(figures_path, exist_ok=True)
     
+    # Initialize Needleman-Wunsch aligner and tokenizer
+    aligner = NeedlemanWunsch()
+    tokenizer = Tokenizer()
+    
+    # Get all unique color names to create vocabulary
+    all_colors = set()
+    for trial in trials:
+        responses = [r.lower() for r in trial["response"]]
+        correct_responses = [get_expected_color_name(color, inverse_color_mapping).lower() 
+                           for color in trial["color"]]
+        all_colors.update(responses)
+        all_colors.update(correct_responses)
+    
+    # Create vocabulary mapping
+    vocab = {color: idx for idx, color in enumerate(sorted(all_colors))}
+    
+    # Calculate word-level edit distances
+    edit_distances = []
+    for trial in trials:
+        responses = [r.lower() for r in trial["response"]]
+        correct_responses = [get_expected_color_name(color, inverse_color_mapping).lower() 
+                           for color in trial["color"]]
+        
+        # Convert to integer tokens
+        response_tokens = [vocab[r] for r in responses]
+        correct_tokens = [vocab[c] for c in correct_responses]
+        
+        # Calculate alignment score
+        alignment_score = aligner.get_alignment_score(response_tokens, correct_tokens)
+        edit_distances.append(alignment_score)
+    
     # Plot edit distance distribution
     plt.figure(figsize=(10, 6))
-    plt.hist([levenshtein_distance(r.lower(), c.lower()) 
-              for trial in trials 
-              for r, c in zip(trial["response"], 
-                            [get_expected_color_name(color, inverse_color_mapping) 
-                             for color in trial["color"]])],
-             bins=20)
-    plt.title("Distribution of Levenshtein Distances")
+    plt.hist(edit_distances, bins=20)
+    plt.title("Distribution of Word-Level Edit Distances")
     plt.xlabel("Edit Distance")
     plt.ylabel("Frequency")
     plt.savefig(os.path.join(figures_path, "edit_distance_distribution.png"))
@@ -492,7 +514,7 @@ def main():
     else:
         # For single experiment analysis
         logger.info(f"Analyzing single experiment: {args.experiment_path}")
-        df = analyze_single_experiment(args.experiment_path)
+        df, df_errors, num_of_response_stats = analyze_single_experiment(args.experiment_path)
         
         # Calculate summary statistics with error bars
         summary = df.groupby('condition')['correct_color'].agg(['mean', 'count', 'std']).reset_index()

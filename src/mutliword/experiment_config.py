@@ -5,10 +5,10 @@ from typing import Dict
 
 @dataclass
 class ExperimentConfig:
-    color_mapping: Dict[str, str] = field(default_factory=lambda: {
+    complex_color_mapping: Dict[str, str] = field(default_factory=lambda: {
         # Color words
         "Purple": "purple",
-        "Green": "green",
+        "Green": "green", 
         "Brown": "brown",
         "Blue": "blue",
         "Red": "red",
@@ -24,6 +24,15 @@ class ExperimentConfig:
         "Fish": None,
         "Star": None
     })
+    simple_color_mapping: Dict[str, str] = field(default_factory=lambda: {
+        # Color words
+        "Blue": "blue",
+        "Red": "red",
+        # Neutral word
+        "XXXX": None
+    })
+    use_complex_mapping: bool = False  # Flag to choose between complex and simple mapping
+    color_mapping: Dict[str, str] = field(init=False)  # Will be set in __post_init__
     neutral_word_probability: float = 0.2  # 20% chance of a word being neutral
     number_of_trials: int = 100
     number_of_words_per_trial: int = 1
@@ -42,6 +51,9 @@ class ExperimentConfig:
     initial_retry_delay: float = 1.0  # Initial delay for retries in seconds
     seed: int = 42
     state_expected_length: bool = True
+
+    def __post_init__(self):
+        self.color_mapping = self.complex_color_mapping if self.use_complex_mapping else self.simple_color_mapping
 
     @property
     def prompt(self) -> str:
